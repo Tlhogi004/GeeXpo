@@ -72,27 +72,28 @@
 		<table>
 			<tbody>
 				<tr>
-					<td style="width: 10%; vertical-align: top; margin-top: 10.8px;">
+					<td style="width: 10%; vertical-align: top; margin-top: 10.8px; background: #1A237E;">
 						<table style="margin-left: 0px;">
 							<tbody>
 								<tr>
 									<div id="side-bar-left" style="margin-top: 10.8px; margin-left: 1px; margin-right: 1px; text-decoration: none; width: 10%;">
 										<ul>
-											<li><a href="#" onclick="dashboard_display();">DASHBOARD</a></li>
-											<li><a href="#" onclick="customermanagement_display();">CUSTOMER MANGEMENT</a></li>
-											<li><a href="#">PACKAGE MANGEMENT</a></li>
-											<li><a href="#">SCHEDULE MANGEMENT</a></li>
-											<li><a href="#">TRUCK MANGEMENT</a></li>
-											<li><a href="map.php">TRACKING</a></li>
-											<li><a href="#">SETTINGS</a></li>
-											<li><a href="#">PROFILE</a></li>
+											<!-- <img src="Images/britehouse_icon.png" alt="britehouse_icon"> -->
+											<li style="border-top: 0.5px solid white;"><a href="#" onclick="dashboard_display();">DASHBOARD</a></li>
+											<li style="border-top: 0.5px solid white;""><a href="#" onclick="customermanagement_display();">CUSTOMER MANGEMENT</a></li>
+											<li style="border-top: 0.5px solid white;""><a href="#">PACKAGE MANGEMENT</a></li>
+											<li style="border-top: 0.5px solid white;"><a href="#">SCHEDULE MANGEMENT</a></li>
+											<li style="border-top: 0.5px solid white;"><a href="#">TRUCK MANGEMENT</a></li>
+											<li style="border-top: 0.5px solid white;"><a href="map.php">TRACKING</a></li>
+											<li style="border-top: 0.5px solid white;"><a href="#">SETTINGS</a></li>
+											<li style="border-top: 0.5px solid white; border-bottom: 0.5px solid white;"><a href="#">PROFILE</a></li>
 										</ul>
 									</div>
 								</tr>
 							</tbody>
 						</table>		
 					</td>
-					<td id="dashboard-panel" style="width: 100%; margin-top: 5px; vertical-align: top;">
+					<td id="dashboard-panel" style="width: 100%; margin-top: 0px; vertical-align: top; background-color: whitesmoke; height: 556px;">
 						<table>
 							<tbody>
 								<tr>

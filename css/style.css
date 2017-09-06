@@ -330,6 +330,10 @@ header{
   text-overflow: all;
 }
 
+#body-nav ul li:onclick{
+  background-color: black;
+}
+
 #lightblue-bar {
   background: linear-gradient(#64B5F6, #64B5F6);
   color: white;
