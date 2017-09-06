@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>About Us | BriteHouse</title>
+	
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+	<header>
+		<div id="top-div">
+			<select id="mylist" onchange="favlang()">
+				<option>English</option>
+			</select>
+
+			<input type="text" placeholder="SEARCH" style="border-radius: 10px;">
+		</div>
+
+		<div id="green-bar"></div>
+
+		<div id="log-bar">
+			<table>
+				<tbody>
+					<tr>
+						<td>Username:</td><td><input type="text" name="txtusername" id="txtusername"></td>
+						<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword"></td>
+						<td><input type="submit" value="LOGIN" onclick="login()" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
+						<td><input type="button" value="REGISTER" id="registerButton" onclick="location.href='signup.html';" style="background-color: grey; color: white; border-color: grey; border-radius: 3px;"></td>
+						<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px;"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div id="image-src">
+			<img src="Images/britehouse_icon.png" alt="britehouse_icon">
+		</div>
+	</header>
+	<a href="register.html" id="registerpage" name="registerpage"></a>
+	<script type="text/javascript">
+		function favlang() {
+			var mylist=document.getElementById("mylist");
+			document.getElementById("favorite").value=mylist.options(mylist.selectedIndex).text;
+
+		}
+
+		function login() {
+			var txtusername-document.getElementById("txtusername");
+
+			alert(txtusername);
+		}
+	</script>
+</head>
+<body>
+	<div id="lightblue-bar"></div>
+
+	<div id="body-nav">
+		<ul>
+			<li><a href="index.html">HOME</a></li>
+			<li><a href="#">ABOUT</a></li>
+			<li><a href="#">ORDER CENTER</a>
+				<ul>
+					<li><a href="orderentry.html">ORDER ENTRY</a></li>
+					<li><a href="orderstatushistory.php">ORDER STATUS AND HISTORY</a></li>
+					<li><a href="productsearch.html">PRODUCT SEARCH</a></li>
+				</ul>
+			</li>
+			<li><a href="#">FORUMS</a></li>
+			<li><a href="#">CONTACT</a>
+				<ul>
+					<li><a href="map.php">MAP</a></li>
+					<li><a href="contacts.html">CONTACTS</a></li>
+				</ul>
+			</li>
+			<li><a href="help.html">HELP</a></li>
+			<li><a href="updates.html">UPDATES</a></li>
+		</ul>
+	</div>
+
+	<div id="body-middle-div">
+		<article id="about-article">
+			<div id="about-article-dark">
+				<h1>What is our Mission?</h1>
+				<p>
+					In our company, we have several vehicles doing deliveries of consignments, packages and envelopes containing
+					products shipped to customers, documentation and invoices, payments, gifts and other items. We have trucks,
+					minivans, and smaller three wheeled delivery vehicles. They have different load capacities and not all the vehicles
+					can carry all the types of packages we must deliver. They have different costs to operate, and different ranges
+					from the depot they can cover.
+				</p>
+
+				<p>
+					We have several drivers on rotation throughout the week. Our drivers have licenses for specific vehicle types, so
+					not all the drivers can drive all the vehicles. There are two drivers assigned to each truck and minivan for each
+					shift, and one driver for the smaller vehicles. We do deliveries every day of the week, starting at 8h00 until 17h00.
+					We also do deliveries on Saturdays, 08h00 until 13h00.
+				</p> 
+			</div>
+		</article>
+
+		<aside id="right-side-bar">
+			<div id="right-side-bar-dark">
+				<h1>What are our Vision?</h1>
+				<p>
+					We have several drivers on rotation throughout the 	week. Our drivers have licenses for specific vehicle types, so
+					not all the drivers can drive all the vehicles. There are two drivers assigned to each truck and minivan for each
+					shift, and one driver for the smaller vehicles. We do deliveries every day of the week, starting at 8h00 until 17h00.
+					We also do deliveries on Saturdays, 08h00 until 13h00.
+				</p>
+			</div>
+		</aside>
+
+		<aside id="left-side-bar">
+			<div id="left-side-bar-dark">
+				<h1>What is our Goals?</h1>
+				<p>
+					<h4>Our database application should:</h4>
+	 					<li>Reduce data redundancy as far as possible.</li>
+	 					<li>To fully develop functioning application for SIXSAIR Company.</li>
+	 					<li>Produce accurate, relevant and timely reports to system users.</li>
+	 					<li>Have high data integrity.</li>
+	                <h4>After completion of this module:</h4>
+	 					<li>We should be excellent in developing database system that are efficient.</li>
+	 					<li>We should be able to apply concepts learned from this module into different case scenarios.</li>
+				</p>
+			</div>
+		</aside>
+	</div>
+
+	<footer>
+		<div id="bottom">
+			Britehouse Inc. &copy; Copyright 2017 | Terms and Conditions Apply
+		</div>
+	</footer>
+</body>
+</html>

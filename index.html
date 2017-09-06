@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Home | BriteHouse</title>
+	
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+	<header>
+		<div id="top-div">
+			<select id="mylist" onchange="favlang()">
+				<option>English</option>
+			</select>
+
+			<input type="text" placeholder="SEARCH" style="border-radius: 10px;">
+		</div>
+
+		<div id="green-bar"></div>
+
+		<div id="log-bar">
+			<form action="login.php" method="get">
+				<table>
+				<tbody>
+					<tr>
+						<td>Username:</td><td><input type="text" name="txtusername" id="txtusername"></td>
+						<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword"></td>
+						<td><input type="submit" value="LOGIN" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
+						<td><input type="button" value="REGISTER" id="registerButton" onclick="location.href='signup.html';" style="background-color: grey; color: white; border-color: grey; border-radius: 3px;"></td>
+						<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px;"></td>
+					</tr>
+				</tbody>
+			</table>
+			</form>
+		</div>
+
+		<div id="image-src">
+			<img src="Images/britehouse_icon.png" alt="britehouse_icon">
+		</div>
+	</header>
+	<a href="register.html" id="registerpage" name="registerpage"></a>
+	<script type="text/javascript">
+		function favlang() {
+			var mylist=document.getElementById("mylist");
+			document.getElementById("favorite").value=mylist.options(mylist.selectedIndex).text;
+
+		}
+	</script>
+</head>
+<body>
+	<div id="lightblue-bar"></div>
+
+	<div id="body-nav">
+		<ul>
+			<li><a href="index.html">HOME</a></li>
+			<li><a href="about.html">ABOUT</a></li>
+			<li><a href="#">ORDER CENTER</a>
+				<ul>
+					<li><a href="orderentry.html">ORDER ENTRY</a></li>
+					<li><a href="orderstatushistory.php">ORDER STATUS AND HISTORY</a></li>
+					<li><a href="productsearch.html">PRODUCT SEARCH</a></li>
+				</ul>
+			</li>
+			<li><a href="#">FORUMS</a></li>
+			<li><a href="contacts.html">CONTACT US</a></li>
+			<li><a href="help.html">HELP</a></li>
+			<li><a href="updates.html">UPDATES</a></li>
+		</ul>
+	</div>
+
+	<div id="body-middle-div">
+		<table>
+			<tbody>
+				<tr>
+					<img id="home-img" frameborder="5" src="Images/background-icon.png" alt="background icon">
+				</tr>
+
+				<tr>
+					<div id="nav-bar">
+						
+					</div>	
+				</tr>
+
+				<tr>
+					<div id="quick-links" frameborder="5">
+						
+					</div>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<footer>
+		<div id="bottom">
+			Britehouse Inc. &copy; Copyright 2017 | Terms and Conditions Apply
+		</div>
+	</footer>
+</body>
+</html>
