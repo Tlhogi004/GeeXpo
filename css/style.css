@@ -71,7 +71,6 @@ form#signup-form input {
 }
 
 form#order_entry_form input {
-  display: block;
   box-sizing: border-box;
   width: 100%;
   outline: none;
@@ -107,20 +106,11 @@ form#order_entry_form input[type="password"]:focus {
 }
 
 form#order_entry_form span {
-  display: block;
-  background: red;
   padding: 2px 5px;
   color: #666;
 }
 
 form#signup-form span {
-  display: block;
-  background: red;
-  padding: 2px 5px;
-  color: #666;
-}
-
-form#order_entry_form span {
   display: block;
   background: red;
   padding: 2px 5px;
@@ -480,6 +470,17 @@ article#about-article {
   padding-left: 20px;
   padding-right: 20px;
   color: white;
+}
+
+#notice_div p {
+ padding: 5px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  background: linear-gradient(#64B5F6, #000000);
+  border:0;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: white; 
 }
 
 #left-side-bar-dark {

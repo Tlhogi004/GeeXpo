@@ -61,30 +61,6 @@
 								</tbody>
 							</table>	
 						</td>
-
-						<td style="width: 30%; margin-top: 10px; vertical-align: top; border: 1px solid black;">
-							<table style="margin-left: 0;">
-								<tbody>
-									<tr>
-										<tr>
-											<th style="border: 1px solid black; vertical-align: top;">PACKAGE CODE</th>
-											<th style="border: 1px solid black; vertical-align: top;">PACKAGE DESCRIPTION</th>
-											<th style="border: 1px solid black; vertical-align: top;">TRANSPORT TYPE</th>
-											<th style="border: 1px solid black; vertical-align: top;">TRANSPORT CODE</th>	
-										</tr>
-										<?php while($row1 = mysqli_fetch_array($result1)):;?>
-										<tr>
-											<td style="border: 1px solid black;"><?php echo $row1[0];?></td>
-											<td style="border: 1px solid black;"><?php echo $row1[1];?></td>
-											<td style="border: 1px solid black;"><?php echo $row1[2];?></td>
-											<td style="border: 1px solid black;"><?php echo $row1[3];?></td>
-											<td style="width: 200px;"><input type="submit" id='<?php echo $row1[3];?>' onclick="calcCoordinates('<?php echo $row1[3];?>');" value='TRACK CAR-<?php echo $row1[3];?>' style="width: 200px;"></td>
-										</tr>
-										<?php endwhile;?>
-									</tr>
-								</tbody>
-							</table>		
-						</td>
 						<td style="width: 800px">
 							<div id="map2"></div>
 						</td>
@@ -110,12 +86,8 @@
 		}
 
 		function calcCoordinates(carid) {
-			alert(carid);
-			var truckid = carid;
-			<?php if($row1 = mysqli_fetch_array($result2)):;?>
-				carLatitude = -26.73352;
-				carLongitude = 27.09118;
-			<?php endif;?>
+			carLatitude = -26.73352;
+			carLongitude = 27.09118;
 			initMap();
 		}
 
@@ -130,8 +102,8 @@
 	        if (navigator.geolocation) {
 	          navigator.geolocation.getCurrentPosition(function(position) {
 	            var pos = {
-	              lat: carLatitude,
-	              lng: carLongitude
+	              lat: -26.73352,
+	              lng: 27.09118
 	            };
 
 	            infoWindow.setPosition(pos);

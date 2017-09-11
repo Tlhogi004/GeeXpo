@@ -6,7 +6,7 @@
 
 	$connect = mysqli_connect($hostname, $username, $password, $databaseName);
 	
-	$query1 = "SELECT * FROM britehousedeliverymanagement.TRANSPORTATION";
+	$query1 = "SELECT * FROM britehousedeliverymanagement.VEHICLE";
 	$query2 = "SELECT CUSTOMER.CUST_FNAME, CUSTOMER.CUST_LNAME, CUSTOMER.CUST_PHONE, CUSTOMER.CUST_EMAIL, CONCAT(CUSTOMER.CUST_STREET, ',', CUSTOMER.CUST_CITY, ',', CUSTOMER.CUST_PROVINCE) FROM britehousedeliverymanagement.CUSTOMER";
 	$query3 = "SELECT * FROM britehousedeliverymanagement.DRIVER";
 	
@@ -26,10 +26,6 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link rel="stylesheet" type="text/css" href="css/calendar_style.css">
 	<script src="https://use.fontawesome.com/484df5253e.js"></script>
-
-	<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.1/animate.min.css'>
-
-      <link rel="stylesheet" href="css/style.css">
 
   	<header>
 		<div id="top-div" style="margin-left: 75.1%;">
@@ -79,11 +75,11 @@
 									<div id="side-bar-left" style="margin-top: 10.8px; margin-left: 1px; margin-right: 1px; text-decoration: none; width: 10%;">
 										<ul>
 											<!-- <img src="Images/britehouse_icon.png" alt="britehouse_icon"> -->
-											<li style="border-top: 0.5px solid white;"><a href="#" onclick="dashboard_display();">DASHBOARD</a></li>
-											<li style="border-top: 0.5px solid white;""><a href="#" onclick="customermanagement_display();">CUSTOMER MANGEMENT</a></li>
-											<li style="border-top: 0.5px solid white;""><a href="#">PACKAGE MANGEMENT</a></li>
+											<li style="border-top: 0.5px solid white;" onclick="dashboard_display();"><a href="#" onclick="dashboard_display();">DASHBOARD</a></li>
+											<li style="border-top: 0.5px solid white;" onclick="customermanagement_display();"><a href="#" onclick="customermanagement_display();">CUSTOMER MANGEMENT</a></li>
+											<li style="border-top: 0.5px solid white;"><a href="#">PACKAGE MANGEMENT</a></li>
 											<li style="border-top: 0.5px solid white;"><a href="#">SCHEDULE MANGEMENT</a></li>
-											<li style="border-top: 0.5px solid white;"><a href="#">TRUCK MANGEMENT</a></li>
+											<li style="border-top: 0.5px solid white;" onclick="truckmanagement_display();"><a href="#" onclick="truckmanagement_display();">TRUCK MANGEMENT</a></li>
 											<li style="border-top: 0.5px solid white;"><a href="map.php">TRACKING</a></li>
 											<li style="border-top: 0.5px solid white;"><a href="#">SETTINGS</a></li>
 											<li style="border-top: 0.5px solid white; border-bottom: 0.5px solid white;"><a href="#">PROFILE</a></li>
@@ -110,15 +106,15 @@
 										<tbody>
 											<tr>
 												<td style="text-align: center; float: left; width: 130px; height: 80px; background-color: white; line-height: 80px; font-size: 0.9em; list-style: none; border: 1px solid grey;">
-												<li><a href="#" onclick="driver_display();" style="font-size: 12px; color: grey; text-decoration: none;">DRIVER</a></li>
+												<li onclick="driver_display();"><a href="#" onclick="driver_display();" style="font-size: 12px; color: grey; text-decoration: none;">DRIVER</a></li>
 												</td>
 
 												<td style="text-align: center; float: left; width: 130px; height: 80px; background-color: white; line-height: 80px; font-size: 0.9em; list-style: none; margin-left: 30px; border: 1px solid grey;">
-												<li><a href='#'; onclick="truck_display();" style="font-size: 12px; color: grey; text-decoration: none;">TRUCK</a></li>
+												<li onclick="truck_display();"><a href='#'; onclick="truck_display();" style="font-size: 12px; color: grey; text-decoration: none;">TRUCK</a></li>
 												</td>
 
 												<td style="text-align: center; float: left; width: 130px; height: 80px; background-color: white; line-height: 80px; font-size: 0.9em; list-style: none; margin-left: 30px; border: 1px solid grey;">
-												<li><a href="#" onclick="delivery_display();" style="font-size: 12px; color: grey; text-decoration: none;">DELIVERY</a></li>
+												<li onclick="delivery_display();"><a href="#" onclick="delivery_display();" style="font-size: 12px; color: grey; text-decoration: none;">DELIVERY</a></li>
 												</td>
 											</tr>
 
@@ -176,7 +172,11 @@
 																</tr>
 																<tr>
 																	<td>
-																		<div style="height: 418px; width: 290px; border-top: none; border: 1px solid grey;"></div>
+																		<div style="height: 418px; width: 290px; border-top: none; border: 1px solid grey;">
+																			 <p id="notice_div" style="padding: 5px; margin-top: 8px; margin-bottom: 8px; background: linear-gradient(#64B5F6, #000000); border:0; padding-left: 20px; padding-right: 20px; color: white; text-align: justify;">
+																			 	Indicates a successful or positive action. gguyguyhiuhikhoihiohoijoijoihouhhu
+																			 </p>
+																		</div>
 																	</td>
 																</tr>
 															</tbody>
@@ -268,7 +268,7 @@
 						</table>				
 					</td>
 
-					<td id="signup-form-td" style="width: 80%;  display: none;">
+					<td id="signup-form-td" style="display: none; width: 80%;">
 						<form action="savevehicles.php" method="get" id="signup-form" style="margin-left: 0px; margin-top: 10px; width: 100%;">
 						  <h2>VEHICLE REGISTRATION</h2>
 							<table>
@@ -301,7 +301,7 @@
 						</form>
 					</td>
 
-					<td id="customerdata-td" style="width: 100%; margin-top: 10.8px; vertical-align: top; display: none; background: -webkit-linear-gradient(left, #25c481, #25b7c4);background: linear-gradient(to right, #25c481, #25b7c4); margin-right: 5px;">
+					<td id="customerdata-td" style="display: none; width: 100%; margin-top: 10.8px; vertical-align: top; background: -webkit-linear-gradient(left, #25c481, #25b7c4);background: linear-gradient(to right, #25c481, #25b7c4); margin-right: 5px;">
 						<section>
 						  <!--for demo wrap-->
 						  <h1>CUSTOMER INFORMATION</h1>
@@ -372,6 +372,12 @@
 			document.getElementById('signup-form-td').style.display = 'none';	
 		}
 
+		function truckmanagement_display() {
+			document.getElementById('signup-form-td').style.display = 'block';
+			document.getElementById('customerdata-td').style.display = 'none';
+			document.getElementById('dashboard-panel').style.display = 'none';
+		}
+
 		function favlang() {
 			var mylist=document.getElementById("mylist");
 			document.getElementById("favorite").value=mylist.options(mylist.selectedIndex).text;
@@ -384,12 +390,6 @@
 	<script src='https://npmcdn.com/react@15.3.0/dist/react.min.js'></script>
 	<script src='https://npmcdn.com/react-dom@15.3.0/dist/react-dom.min.js'></script>
 	<script src="js/calendar_index.js"></script>
-
-	  <script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
-<script src='https://npmcdn.com/react@15.3.0/dist/react.min.js'></script>
-<script src='https://npmcdn.com/react-dom@15.3.0/dist/react-dom.min.js'></script>
-
-    <script src="js/index.js"></script>
 	<footer>
 		<div id="bottom">
 			Britehouse Inc. &copy; Copyright 2017 | Terms and Conditions Apply

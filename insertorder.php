@@ -5,25 +5,20 @@
 	$conn = mysqli_connect($server_name,$mysql_username,$mysql_password,$db_name)
 	or die ('Could not connect to the database server' . mysqli_connect_error());
 
-	if (isset($_GET['submit'])) {
+	if (isset($_GET['ordertype'])) {
 
 	    if (!$conn) {
 	        die("Connection failed: " . mysqli_connect_error());
 	    }
 	    // prepare and bind
-	    $stmt = $conn->prepare("CALL insert_user(?, ?, ?, ?, ?, ?, ?, ?)");
+	    $stmt = $conn->prepare("CALL insert_product(?,?,?)");
 
-	    $stmt->bind_param("ssssssss", $firstname, $lastname, $phonenumber, $email, $street, $province, $country, $password);
+	    $stmt->bind_param("sss", $ordertype, $orderexpected, $customer_email);
 
 	    // set parameters and execute
-	    $firstname = $_GET["firstname"];
-		$lastname = $_GET["surname"];
-		$phonenumber = $_GET["phoneno"];
-		$email = $_GET["Email"];
-		$street = $_GET["street"];
-		$country = $_GET["city"];
-		$province = $_GET["province"];
-		$password = $_GET["password"];
+	    $ordertype = $_GET["ordertype"];
+	    $customer_email = $_GET["email"];
+		$orderexpected = $_GET["datetimepicker1"];
 
 	    $stmt->execute();
 
@@ -37,6 +32,6 @@
 
 	mysqli_close($conn);
 	if(!isset($_SESSION['login_user'])){
-	    header("location:signup.html");
+	    header("location:orderentry.html");
 	}
 ?>
