@@ -255,7 +255,7 @@ header{
 #log-bar {
   padding: 0px;
   color: black;
-  margin-left: 55%;
+  margin-left: 61.5%;
   margin-top: 10px;
 }
 
@@ -268,13 +268,16 @@ header{
 
 #body-nav ul, #side-bar-left ul {
   margin-top: 0px;
-  background: linear-gradient(#64B5F6, #1A237E);
+  background: #005566;
+  color: #056D80;
   padding: 0px;
   list-style: none;
 }
 
 #side-bar-left ul li{
-  background: #1A237E;
+  background: #005566;
+  color: #056D80;
+  border-top: 1px solid rgba(69, 74, 84, 0.7);
   text-align: left;
   float: left;
   width: 195.39px;
@@ -290,7 +293,7 @@ header{
 #body-nav ul li{
   text-align: center;
   float: left;
-  width: 195.39px;
+  width: 225.47px;
   height: 30px;
   background: linear-gradient(#64B5F6, #1A237E);
   line-height: 30px;
@@ -345,7 +348,7 @@ header{
   background-color: white;
   color: white;
   width: 90%;
-  height: 500px;
+  height: auto;
   margin-left: 82%;
   margin: 0 auto;  
 }
@@ -370,6 +373,7 @@ header{
 }
 
 footer #bottom{
+  position: relative;
   margin: 0 auto;
   margin-top: 10px;
   margin-bottom: 10px;
@@ -414,7 +418,7 @@ td {
   color: black;
 }
 td input[type="submit"] {
-  background: linear-gradient(#64B5F6, #1A237E);
+  background-color: #00a651;
   box-shadow: 0 3px 0 0 green;
   border-radius: 2px;
   border: none;
@@ -497,7 +501,7 @@ article#about-article {
   background-color: white;
   margin: 0 auto;
   width: 90%;
-  height: 70%;
+  height: auto;
 }
 
 table#side-left-panel {
@@ -512,22 +516,87 @@ table#side-left-panel {
 
 #side-bar-left ul li:hover {
   margin-left: 0px;
-  background: linear-gradient(#AEEA00, #C6FF00);
+  background: #056D80;
 }
 
+#profile-edit-div, #profile-changepassword-div {
+  border: 1px solid lightgrey;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
+#profile-edit-div h2, #profile-changepassword-div h2 {
+  border-bottom: 1px solid lightgrey;
+  height: 30px;
+  line-height: 30px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #373e4a;
+}
+
+#profile-edit-div div, #profile-changepassword-div div {
+  border-bottom: 1px solid lightgrey;
+  margin-bottom: 25px;
+}
+
+#profile-edit-div input[type="button"], #profile-changepassword-div input[type="button"] {
+  width: 200px;
+  text-align: center;
+}
+
+#profile-edit-div div input, #profile-edit-div div textarea, #profile-changepassword-div div input {
+  text-align: justify;
+  border-radius: 2px;
+  border: 1px solid lightgrey;
+  width: 400px;
+}
+
+#noticeboard_content p {
+  padding: 5px; 
+  margin-left: 10px;
+  margin-right: 10px;  
+  background: white; 
+  height: auto; 
+  padding-left: 20px; 
+  padding-right: 20px; 
+  color: grey;
+  text-align: justify;
+}
+
+#noticeboard_content p label {
+  display: block;
+  padding: 5px;
+  margin-left: 0px;  
+  background: blue; 
+  padding-left: 20px; 
+  padding-right: 5px; 
+  color: white;
+  width: 45%;
+  text-align: justify;
+  border-radius: 2px;
+}
 
 /**************************style2**************************/
-
-#customerdata-td section h1, #truckdata_td section h1, #driverdata_td section h1 {
+#customerdata-td h1, #truckdata_td h1, #driverdata_td h1, #truckmanagement-td h1, #profile-td h1, #deliverymanagement-td h1 {
   font-size: 30px;
-  color: #fff;
+  color: black;
+  text-transform: uppercase;
+  font-weight: 300;
+  text-align: center;
+  margin-bottom: 15px;
+  border-bottom: 1px solid rgba(69, 74, 84, 0.7);
+}
+
+#customerdata-td h2, #truckdata_td h2, #driverdata_td h2, #truckmanagement-td h2, #profile-td h2, #deliverymanagement-td h2 {
+  font-size: 20px;
+  color: black;
   text-transform: uppercase;
   font-weight: 300;
   text-align: left;
   margin-bottom: 15px;
   border-bottom: 1px solid white;
 }
-#tbl-header table, #tbl-content table, #truckdata_td table, #driverdata_td table {
+#tbl-header table, #tbl-content table, #truckdata_td table, #driverdata_td table, #truckmanagement-td table, #deliverymanagement-td table {
   width:100%;
   table-layout: fixed;
 }
