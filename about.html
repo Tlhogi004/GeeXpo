@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 
 	<header>
-		<div id="top-div">
+		<div id="top-div" style="color: black; height: 40px; width: 100px; font-size: 13.3333px;">
 			<select id="mylist" onchange="favlang()">
 				<option>English</option>
 			</select>
@@ -15,19 +15,27 @@
 		</div>
 
 		<div id="green-bar"></div>
-
-		<div id="log-bar">
-			<table>
+		<div id="exception" style="display: none;">
+			<div id="message" style="background-color: red; width: 200px; text-align: center; margin-left: 65.5%;">
+				<label style="color: black;">Invalid login</label>
+			</div>
+			<div id="message-body" style="background-color: darkorange; width: 200px; text-align: center; margin-left: 65.5%; height: 30px;">
+				<label style="color: black;">Please enter correct email and password!</label>
+			</div>
+		</div>
+		<div id="log-bar" style="margin-left: 59%; color: black; height: 30px; width: 100px; font-size: 13.3333px;">
+			<form onsubmit="return validatePasswords(this);" action="login.php" method="post">
+				<table>
 				<tbody>
 					<tr>
 						<td>Username:</td><td><input type="text" name="txtusername" id="txtusername"></td>
 						<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword"></td>
 						<td><input type="submit" value="LOGIN" onclick="login()" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
-						<td><input type="button" value="REGISTER" id="registerButton" onclick="location.href='signup.html';" style="background-color: grey; color: white; border-color: grey; border-radius: 3px;"></td>
 						<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px;"></td>
 					</tr>
 				</tbody>
 			</table>
+			</form>
 		</div>
 
 		<div id="image-src">
@@ -64,18 +72,11 @@
 				</ul>
 			</li>
 			<li><a href="#">FORUMS</a></li>
-			<li><a href="#">CONTACT</a>
-				<ul>
-					<li><a href="map.php">MAP</a></li>
-					<li><a href="contacts.html">CONTACTS</a></li>
-				</ul>
-			</li>
-			<li><a href="help.html">HELP</a></li>
-			<li><a href="updates.html">UPDATES</a></li>
+			<li><a href="#">CONTACT US</a></li>
 		</ul>
 	</div>
 
-	<div id="body-middle-div">
+	<div id="body-middle-div" style="background-color: white; height: 500px;">
 		<article id="about-article">
 			<div id="about-article-dark">
 				<h1>What is our Mission?</h1>
@@ -124,7 +125,15 @@
 			</div>
 		</aside>
 	</div>
-
+	<script>
+	    function validatePasswords(form) {
+	        if (form.txtusername.value == '' || form.txtpassword.value == '') {
+	            document.getElementById('exception').style.display = 'block';
+	            return false;
+	        }
+	        return true;
+	    }
+	</script>
 	<footer>
 		<div id="bottom">
 			Britehouse Inc. &copy; Copyright 2017 | Terms and Conditions Apply

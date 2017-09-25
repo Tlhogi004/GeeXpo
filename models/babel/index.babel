@@ -328,11 +328,11 @@ var Calendar = React.createClass({
 					<div id="add_entry">
 						<div className="enter_entry">
 							<input type="text" placeholder="Enter title" id="entry_name" />
-							<span id="save_entry" onClick={this.saveEntry.bind(null, this.state.currYear, this.state.currMonthN, this.state.currDay)}>SAVE</span>
+							<span id="save_entry" onClick={this.saveEntry.bind(null, this.state.currYear, this.state.currMonthN, this.state.currDay);}>SAVE</span>
 						</div>
 						<div className="entry_details">
 							<div>
-								<div className="entry_info first">
+								<div className="entry_info first">f
 									<i className="fa fa-image" aria-hidden="true"></i>
 									<input type="file" name='entry-img' id="entry-img" onChange={(e)=>this.handleImage(e)} />
 									<label htmlFor="entry-img" id="for_img"><span id="file_name">Choose an image</span></label>

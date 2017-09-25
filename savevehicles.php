@@ -5,23 +5,22 @@
 	$conn = mysqli_connect($server_name,$mysql_username,$mysql_password,$db_name)
 	or die ('Could not connect to the database server' . mysqli_connect_error());
 
-	if (isset($_GET['transportreg'])) {
+	if (isset($_POST['transportreg'])) {
 
 	    if (!$conn) {
 	        die("Connection failed: " . mysqli_connect_error());
 	    }
 	    // prepare and bind
-	    $stmt = $conn->prepare("INSERT INTO transportation(TRANS_CODE,TRANS_TYPE,TRANS_LOAD_LMT,TRANS_TYPEPACK,TRANS_COST,TRANS_DEPOTRANGE) VALUES (?, ?, ?, ?, ?, ?)");
+	    $stmt = $conn->prepare("INSERT INTO VEHICLE(VEH_CODE,VEH_TYPE,VEH_LOAD_LMT,VEH_COST,VEH_DEPOTRANGE) VALUES (?, ?, ?, ?, ?)");
 
-	    $stmt->bind_param("ssssss", $transportreg, $transportype, $loadlimit, $packagetype, $transportcost, $depotrange);
+	    $stmt->bind_param("sssss", $transportreg, $transportype, $loadlimit, $transportcost, $depotrange);
 
 	    // set parameters and execute
-	    $transportreg = $_GET["transportreg"];
-		$transportype = $_GET["transportype"];
-		$loadlimit = $_GET["loadlimit"];
-		$packagetype = $_GET["packagetype"];
-		$transportcost = $_GET["transportcost"];
-		$depotrange = $_GET["depotrange"];
+	    $transportreg = $_POST["transportreg"];
+		$transportype = $_POST["transportype"];
+		$loadlimit = $_POST["loadlimit"];
+		$transportcost = $_POST["transportcost"];
+		$depotrange = $_POST["depotrange"];
 
 	    $stmt->execute();
 

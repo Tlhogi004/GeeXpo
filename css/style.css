@@ -255,7 +255,7 @@ header{
 #log-bar {
   padding: 0px;
   color: black;
-  margin-left: 61.5%;
+  margin-left: 50%;
   margin-top: 10px;
 }
 
@@ -267,6 +267,7 @@ header{
 }
 
 #body-nav ul, #side-bar-left ul {
+  position: relative;
   margin-top: 0px;
   background: #005566;
   color: #056D80;
@@ -291,9 +292,10 @@ header{
 }
 
 #body-nav ul li{
+  position: relative;
   text-align: center;
   float: left;
-  width: 225.47px;
+  width: 20%;
   height: 30px;
   background: linear-gradient(#64B5F6, #1A237E);
   line-height: 30px;
@@ -311,9 +313,10 @@ header{
 }
 
 #body-nav ul li ul li {
-  position: relative;
+  width: 100%;
+  background-color: orange;
   margin-top: 0;
-  text-align: left;
+  text-align: center;
   display: none;
   z-index: 1000;
 }
@@ -321,10 +324,6 @@ header{
 #body-nav ul li:hover ul li{
   display: block;
   text-overflow: all;
-}
-
-#body-nav ul li:onclick{
-  background-color: black;
 }
 
 #lightblue-bar {
@@ -525,6 +524,12 @@ table#side-left-panel {
   border-radius: 4px;
 }
 
+#profile-edit-div2 {
+  border: 1px solid white;
+  margin-bottom: 20px;
+  border-radius: 4px;
+}
+
 #profile-edit-div h2, #profile-changepassword-div h2 {
   border-bottom: 1px solid lightgrey;
   height: 30px;
@@ -534,9 +539,38 @@ table#side-left-panel {
   color: #373e4a;
 }
 
+#myCarousel {
+}
+
 #profile-edit-div div, #profile-changepassword-div div {
   border-bottom: 1px solid lightgrey;
   margin-bottom: 25px;
+}
+
+#profile-edit-div2 div {
+  border-bottom: 1px solid white;
+  margin-bottom: 25px;
+  height: 30px;
+}
+
+#profile-edit-div2 p label {
+  text-align: right;
+  font-size: 12px;
+}
+
+#profile-edit-div2 p textarea {
+  margin-left: 15px;
+  font-size: 12px;
+  width: 200px;
+}
+
+#profile-edit-div2 p input {
+  margin-left: 15px;
+  font-size: 12px;
+  width: 200px;
+  text-align: justify;
+  border-radius: 2px;
+  border: 1px solid lightgrey;
 }
 
 #profile-edit-div input[type="button"], #profile-changepassword-div input[type="button"] {

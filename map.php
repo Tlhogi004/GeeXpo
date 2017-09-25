@@ -1,19 +1,39 @@
 <?php
-	$hostname = "localhost";
-	$username = "root";
-	$password = "tl004";
-	$databaseName = "britehousedeliverymanagement";
+	require_once __DIR__ . '/db_config.php';
 
-	$truckid = 0;
-	$connect = mysqli_connect($hostname, $username, $password, $databaseName);
-	$query1 = "SELECT package.PACK_CODE, package.PACK_DESCR, transportation.TRANS_TYPE, transportation.TRANS_CODE 
-				FROM britehousedeliverymanagement.transportation
-				INNER JOIN britehousedeliverymanagement.delivery ON delivery.TRANS_CODE = transportation.TRANS_CODE
-				INNER JOIN britehousedeliverymanagement.package ON package.DEL_CODE = delivery.DEL_CODE;";
-	$result1 = mysqli_query($connect, $query1);
+	$location_latitude = '0';
+	$location_longitude = '0';
 
-	$query2 = "SELECT * FROM britehousedeliverymanagement.LOCATION WHERE LOCATION.TRANS_CODE = " .$truckid;
-	$result2 = mysqli_query($connect, $query2);
+	if($_SERVER["REQUEST_METHOD"] == "POST") {
+	    // username and password sent from form
+
+	    $truckid =  mysqli_real_escape_string($conn,$_POST['truckid']);
+
+	    $sql = "SELECT LOCATION.LOC_LATITUDE, LOCATION.LOC_LONGITUDE FROM LOCATION WHERE LOCATION.LOC_ID = '$truckid'";
+
+	    $result = mysqli_query($conn,$sql);
+	    $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+
+	    $count = mysqli_num_rows($result);
+
+	    $result1 = $conn->query($sql);
+
+	    if ($result1->num_rows > 0) {
+	        // output data of each row
+	        while($row = $result1->fetch_assoc()) {
+	            $location_latitude = $row["LOC_LATITUDE"];
+            	$location_longitude = $row["LOC_LONGITUDE"];
+	        }
+	    }
+	    // If result matched $myusername and $mypassword, table row must be 1 row
+
+	    if($count == 1) {
+	        
+	    }else {
+	        session_start();
+	        header("location: loggedinadmin.php");
+	    }
+	}
 ?>
 
 <!DOCTYPE html>
@@ -34,19 +54,7 @@
 
 		<div id="green-bar"></div>
 
-		<div id="log-bar">
-			<table>
-				<tbody>
-					<tr>
-						<td>Username:</td><td><input type="text" name="txtusername" id="txtusername"></td>
-						<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword"></td>
-						<td><input type="submit" value="LOGIN" onclick="login()" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
-						<td><input type="button" value="REGISTER" onclick="" style="background-color: grey; color: white; border-color: grey; border-radius: 3px;"></td>
-						<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px;"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+		<div id="log-bar"></div>
 
 		<div id="image-src">
 			<table>
@@ -72,7 +80,7 @@
 </head>
 <body>
 	<div id="lightblue-bar"></div>
-	<div id="map"></div>
+	<div id="map" style="height: 550px; color: black; font-size: 13.3333; font-style: Arial; font-family: Arial;"></div>
 
 	<script>
 		var map, infoWindow;
@@ -85,16 +93,18 @@
 
 		}
 
-		function calcCoordinates(carid) {
-			carLatitude = -26.73352;
-			carLongitude = 27.09118;
+		function calcCoordinates() {
+			carLatitude = <?php echo htmlentities($location_latitude)?>;
+			carLongitude = <?php echo htmlentities($location_longitude)?>;
 			initMap();
 		}
+
+		calcCoordinates();
 
 		function initMap() {
 	        map = new google.maps.Map(document.getElementById('map'), {
 	          center: {lat: -4.397, lng: 150.644},
-	          zoom: 20
+	          zoom: 15
 	        });
 	        infoWindow = new google.maps.InfoWindow;
 
@@ -102,12 +112,12 @@
 	        if (navigator.geolocation) {
 	          navigator.geolocation.getCurrentPosition(function(position) {
 	            var pos = {
-	              lat: -26.73352,
-	              lng: 27.09118
+	              lat: carLatitude,
+	              lng: carLongitude
 	            };
 
 	            infoWindow.setPosition(pos);
-	            infoWindow.setContent('Location found.');
+	            infoWindow.setContent("<?php echo htmlentities($truckid)?>");
 	            infoWindow.open(map);
 	            map.setCenter(pos);
 	          }, function() {

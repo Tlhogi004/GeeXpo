@@ -9,9 +9,6 @@ $(window).on("load resize ", function() {
 var $password = $("#password");
 var $confirmPassword = $("#confirm_password");
 
-//Hide hints
-$("form span").hide();
-
 function isPasswordValid() {
   return $password.val().length >= 8;
 }

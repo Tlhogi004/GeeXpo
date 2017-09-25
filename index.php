@@ -1,17 +1,22 @@
+<?php
+	session_start();
+	$user = $_SESSION['login_user'];
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Home | BriteHouse</title>
 	
-	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" not(#top-div) />
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<!-- <link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet" /> -->
+	<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-	<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+	<link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css"> -->
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 
 	<header>
-		<div id="top-div" style="color: black; height: 40px; width: 100px; font-size: 13.3333px;">
-			<select id="mylist" onchange="favlang()" style="height: 25px;">
+		<div id="top-div">
+			<select id="mylist" onchange="favlang()" style="color: black; height: 18.8px; width: 67.6px; margin-left: 50px; font-size: 13.3333; font-family: Arial; margin: 0.5px;">
 				<option>English</option>
 			</select>
 
@@ -20,22 +25,22 @@
 
 		<div id="green-bar"></div>
 		<div id="exception" style="display: none;">
-			<div id="message" style="background-color: red; width: 200px; text-align: center; margin-left: 65.5%;">
+			<div id="message" style="background-color: red; width: 200px; text-align: center; margin-left: 65.5%; height: 30px;">
 				<label style="color: black;">Invalid login</label>
 			</div>
 			<div id="message-body" style="background-color: darkorange; width: 200px; text-align: center; margin-left: 65.5%; height: 30px;">
 				<label style="color: black;">Please enter correct email and password!</label>
 			</div>
 		</div>
-		<div id="log-bar" style="margin-left: 59%; color: black; height: 30px; width: 100px; font-size: 13.3333px;">
+		<div id="log-bar">
 			<form onsubmit="return validatePasswords(this);" action="login.php" method="post">
 				<table>
 				<tbody>
 					<tr>
-						<td>Username:</td><td><input type="text" name="txtusername" id="txtusername" style="margin-left: 3px; margin-right: 3px;"></td>
-						<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword" style="margin-left: 3px;"></td>
-						<td><input type="submit" value="LOGIN" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px; margin-left: 3px;"></td>
-						<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px; margin-left: 3px;"></td>
+						<td>Username:</td><td><input type="text" name="txtusername" id="txtusername"></td>
+						<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword"></td>
+						<td><input type="submit" value="LOGIN" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
+						<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px;"></td>
 					</tr>
 				</tbody>
 			</table>
@@ -71,6 +76,7 @@
 			</li>
 			<li><a href="#">FORUMS</a></li>
 			<li><a href="contacts.html">CONTACT US</a></li>
+			<li><a href="updates.html">UPDATES</a></li>
 		</ul>
 	</div>
 
@@ -109,26 +115,12 @@
 		    </div>
 		  </div>
 		  <a class="left carousel-control" href="#myCarousel" data-slide="prev"><span class="glyphicon glyphicon-chevron-left"></span></a> <a class="right carousel-control" href="#myCarousel" data-slide="next"><span class="glyphicon glyphicon-chevron-right"></span></a> </div>
-		  <script type="text/javascript">
-
-			  var _gaq = _gaq || [];
-			  _gaq.push(['_setAccount', 'UA-36251023-1']);
-			  _gaq.push(['_setDomainName', 'jqueryscript.net']);
-			  _gaq.push(['_trackPageview']);
-
-			  (function() {
-			    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			  })();
-
-			</script>
 			<script>
 			    function validatePasswords(form) {
 			        if (form.txtusername.value == '' || form.txtpassword.value == '') {
 			            document.getElementById('exception').style.display = 'block';
 			            return false;
-			        }
+			        } 
 			        return true;
 			    }
 			 

@@ -7,7 +7,7 @@
     <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
    	<link rel="stylesheet" href="css/style.css">
 
-  	<div id="top-div">
+  	<div id="top-div" style="color: black; height: 40px; width: 100px; font-size: 13.3333px;">
 			<select id="mylist" onchange="favlang()">
 				<option>English</option>
 			</select>
@@ -16,19 +16,27 @@
 		</div>
 
 		<div id="green-bar"></div>
-
-		<div id="log-bar">
-			<table>
-				<tbody>
-					<tr>
-						<td>Username:</td><td><input type="text" name="txtusername" id="txtusername"></td>
-						<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword"></td>
-						<td><input type="submit" value="LOGIN" onclick="login()" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
-						<td><input type="button" value="REGISTER" id="registerButton" onclick="location.href='signup.html';" style="background-color: grey; color: white; border-color: grey; border-radius: 3px;"></td>
-						<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px;"></td>
-					</tr>
-				</tbody>
-			</table>
+		<div id="exception" style="display: none;">
+			<div id="message" style="background-color: red; width: 200px; text-align: center; margin-left: 65.5%;">
+				<label style="color: black;">Invalid login</label>
+			</div>
+			<div id="message-body" style="background-color: darkorange; width: 200px; text-align: center; margin-left: 65.5%; height: 30px;">
+				<label style="color: black;">Please enter correct email and password!</label>
+			</div>
+		</div>
+		<div id="log-bar" style="margin-left: 59%; color: black; height: 30px; width: 100px; font-size: 13.3333px;">
+			<form onsubmit="return validatePasswords(this);" action="login.php" method="post">
+				<table>
+					<tbody>
+						<tr>
+							<td>Username:</td><td><input type="text" name="txtusername" id="txtusername"></td>
+							<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword"></td>
+							<td><input type="submit" value="LOGIN" onclick="login()" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
+							<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px;"></td>
+						</tr>
+					</tbody>
+				</table>
+			</form>
 		</div>
 
 		<div id="image-src">
@@ -52,7 +60,6 @@
 			</li>
 			<li><a href="#">FORUMS</a></li>
 			<li><a href="#">CONTACT US</a></li>
-			<li><a href="updates.html">UPDATES</a></li>
 		</ul>
 	</div>
 
@@ -63,11 +70,11 @@
 				<tbody>
 					<tr style="vertical-align: top;">
 						<td style="width: 370px;"><p><label for="itemname" class="floatLabel">ITEM NAME</label><input id="itemname" name="itemname" type="text"></p></td>
-						<td style="width: 330px;" class="controls input-append date form_datetime" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1"
+						<td style="width: 330px;" class="controls input-append date form_datetime" data-date="2017-01-01T00:00:00Z" data-date-format="yyyy-mm-dd h:i:s" data-link-field="dtp_input1"
 						style="width: 37%;">
 						<p style="text-align: left;">
 							<label for="expecteddate" class="floatLabel">EXPECTED DATE</label>
-                    		<input id="expecteddate" name="expecteddate" size="16" type="text" value="09 September 2017 - 09:50 am" readonly style="display: inline;">
+                    		<input id="expecteddate" name="expecteddate" size="16" type="text" value="" readonly style="display: inline;">
 							<span class="add-on"><i class="icon-th" style="display: none; margin-left: 10px;"></i></span>
 							<input type="hidden" id="dtp_input1" value="" style="margin-left: 10px;" /><br/></p>
 						</td>
@@ -82,7 +89,7 @@
 				<tbody>
 					<tr>
 						<td style="width: 370px;"><p><label for="firstname" class="floatLabel">FIRST NAME</label><input id="firstname" name="firstname" type="text"></p></td>
-						<td><p><label for="surname" class="floatLabel">SURNAME</label><input id="surname" name="surname" type="text"></p></td>				
+						<td><p><label for="surname" class="floatLabel">LAST NAME</label><input id="surname" name="surname" type="text"></p></td>				
 						<td><p><label for="phoneno" class="floatLabel">PHONE NO</label><input id="phoneno" name="phoneno" type="text"></p></td>
 					</tr>
 
@@ -92,8 +99,10 @@
 					</tr>
 
 					<tr>
-						<td><p><label for="password" class="floatLabel">PASSWORD</label><input id="password" name="password" type="password"><span>Enter a password longer than 8 characters</span></p></td>
-						<td><p><label for="confirm_password" class="floatLabel">CONFIRM PASSWORD</label><input id="confirm_password" name="confirm_password" type="password"><span>Your passwords do not match</span></p></td>
+						<td><p><label for="password" class="floatLabel">PASSWORD</label><input id="password" name="password" type="password">
+						<span style="background-color: red; color: white">Enter a password longer than 8 characters</span></p></td>
+						<td><p><label for="confirm_password" class="floatLabel">CONFIRM PASSWORD</label><input id="confirm_password" name="confirm_password" type="password">
+						<span style="background-color: red; color: white">Your passwords do not match</span></p></td>
 					</tr>
 				</tbody>
 			</table>
@@ -106,8 +115,16 @@
 	<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	<script type="text/javascript" src="js/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
-	<!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-	<script src="js/index.js"></script> -->
+	<script src="js/index.js"></script>
+	<script>
+	    function validatePasswords(form) {
+	        if (form.txtusername.value == '' || form.txtpassword.value == '') {
+	            document.getElementById('exception').style.display = 'block';
+	            return false;
+	        }
+	        return true;
+	    }
+	</script>
 	<script type="text/javascript">
     $('.form_datetime').datetimepicker({
         //language:  'fr',
@@ -140,6 +157,7 @@
 		maxView: 1,
 		forceParse: 0
     });
+    $('.form_datetime').datetimepicker('setDate', new Date());
 </script>
 
     <footer>
