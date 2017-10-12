@@ -1,848 +1,247 @@
-'use strict';
+var $currentPopover = null;
+  $(document).on('shown.bs.popover', function (ev) {
+    var $target = $(ev.target);
+    if ($currentPopover && ($currentPopover.get(0) != $target.get(0))) {
+      $currentPopover.popover('toggle');
+    }
+    $currentPopover = $target;
+  }).on('hidden.bs.popover', function (ev) {
+    var $target = $(ev.target);
+    if ($currentPopover && ($currentPopover.get(0) == $target.get(0))) {
+      $currentPopover = null;
+    }
+  });
 
-/*
-	Problems i know that exist but i don't want to waste time with them (since it's just a playground):
-	- When an entry title is big and needs a second line it overflows other stuff
-	- the images takes a bit to load so dont rush opening the entry, no need to go into compressing
-	- to remove an image from the input (while inserting an entry) just click the input and click cancel afterwards, the input keeps the file after inserting an entry, when you enter another entry the image will still be there for that new entry
-*/
-var daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-function Month(year, month, dates) {
-	this.date = new Date(year, month, 0);
-	this.numberofdays = this.date.getDate();
-	this.numberofmonth = this.date.getMonth();
-	this.nameofmonth = MonthNames[this.date.getMonth()];
-	this.firstday = 1;
-	this.year = this.date.getFullYear();
-	this.calendar = generateCalendar(this.numberofdays, year, month - 1, this.firstday, dates);
-}
-
-function Date2Day(year, month, day) {
-	return new Date(year, month, day).getDay();
-}
-
-function generateCalendar(numberofdays, year, month, day, dates) {
-	var WEEKDAY = daysOfWeek[Date2Day(year, month, day)];
-	if (WEEKDAY in dates) {
-		dates[WEEKDAY].push(day);
-	} else {
-		dates[WEEKDAY] = [day];
-	}
-	day++;
-	return day > numberofdays ? dates : generateCalendar(numberofdays, year, month, day, dates);
-}
-// to add a zero to the time when this is less than 10
-function addZero(i) {
-	if (i < 10) {
-		i = "0" + i;
-	}
-	return i;
-}
-
-function resetColors() {
-	var defaultColor = { color: "#2980b9" };
-	var color1 = { color: "#DB1B1B" };
-	var color2 = { color: "#8BB929" };
-	var color3 = { color: "#E4F111" };
-	var color4 = { color: "#8129B9" };
-	var color5 = { color: "#666666" };
-	return { dColor: defaultColor, color1: color1, color2: color2, color3: color3, color4: color4, color5: color5 };
-}
-
-Date.daysBetween = function (date1, date2) {
-	var firstDate = new Date(date1.getFullYear(), date1.getMonth(), date1.getDate());
-	var secondDate = new Date(date2.getFullYear(), date2.getMonth(), date2.getDate());
-	var diference = (secondDate - firstDate) / 86400000;
-	return Math.trunc(diference);
-};
-
-var Calendar = React.createClass({
-	displayName: 'Calendar',
-
-	getInitialState: function getInitialState() {
-		return this.generateCalendar();
-	},
-	generateCalendar: function generateCalendar() {
-		var today = new Date();
-		var present = new Date();
-		var month = {};
-		var entries = [];
-		var defaultColor = { color: "#2980b9" };
-		var color1 = { color: "#DB1B1B" };
-		var color2 = { color: "#8BB929" };
-		var color3 = { color: "#E4F111" };
-		var color4 = { color: "#8129B9" };
-		var color5 = { color: "#666666" };
-		var file = {};
-		month = new Month(today.getFullYear(), today.getMonth() + 1, month);
-		return { dates: month, today: today, entry: '+', present: present, entries: entries, dColor: defaultColor, color1: color1, color2: color2, color3: color3, color4: color4, color5: color5, file: file };
-	},
-	update: function update(direction) {
-		var month = {};
-		if (direction == "left") {
-			month = new Month(this.state.dates.date.getFullYear(), this.state.dates.date.getMonth(), month);
-		} else {
-			month = new Month(this.state.dates.date.getFullYear(), this.state.dates.date.getMonth() + 2, month);
-		}
-		this.state.currDay = "";
-		this.state.currMonth = "";
-		this.state.currYear = "";
-		$(".float").removeClass('rotate');
-		return this.setState({ dates: month });
-	},
-	selectedDay: function selectedDay(day) {
-		this.state.warning = "";
-		var selected_day = new Date();
-		selected_day.setDate(day);
-		var currentMonth = this.state.dates.nameofmonth;
-		var currentMonthN = this.state.dates.numberofmonth;
-		var currentYear = this.state.dates.date.getFullYear();
-		return this.setState({ today: selected_day, currDay: day, currMonth: currentMonth, currYear: currentYear, currMonthN: currentMonthN });
-	},
-	returnPresent: function returnPresent() {
-		if ($(".float").hasClass('rotate')) {
-			$(".float").removeClass('rotate');
-			$("#add_entry").addClass('animated slideOutDown');
-			window.setTimeout(function () {
-				$("#add_entry").css('display', 'none');
-			}, 500);
-			$("#entry_name").val("");
-		}
-		var month = {};
-		var today = new Date();
-		month = new Month(today.getFullYear(), today.getMonth() + 1, month);
-		this.state.currDay = "";
-		this.state.currMonth = "";
-		this.state.currYear = "";
-		$(".float").removeClass('rotate');
-		return this.setState({ dates: month, today: today });
-	},
-	addEntry: function addEntry(day) {
-		if (this.state.currDay) {
-			if ($(".float").hasClass('rotate')) {
-				$(".float").removeClass('rotate');
-				$(".entry").css('background', 'none');
-				$("#open_entry").addClass('animated slideOutDown');
-				$("#add_entry").addClass('animated slideOutDown');
-				window.setTimeout(function () {
-					$("#add_entry").css('display', 'none');
-					$("#open_entry").css('display', 'none');
-				}, 700);
-				$("#entry_name").val("");
-				$("#all-day").prop('checked', false); // unchecks checkbox
-				$("#not-all-day").css('display', 'block');
-				$("#enter_hour").val("");
-				$("#entry_location").val("");
-				$("#entry_note").val("");
-				// reset entry colors
-				var resColor = new resetColors();
-				return this.setState(resColor);
-			} else {
-				$(".float").addClass('rotate');
-				$("#add_entry").removeClass('animated slideOutDown');
-				$("#add_entry").addClass('animated slideInUp');
-				$("#add_entry").css('display', 'block');
-				window.setTimeout(function () {
-					$("#entry_name").focus();
-				}, 700);
-			}
-		} else {
-			return this.setState({ warning: "Select a day to make an entry!" });
-		}
-	},
-	saveEntry: function saveEntry(year, month, day) {
-		var entryName = $("#entry_name").val();
-		if ($.trim(entryName).length > 0) {
-			var entryTime = new Date();
-			var entryDate = { year: year, month: month, day: day };
-			$(".duration").css('background', 'none');
-			if ($("#all-day").is(':checked')) {
-				var entryDuration = "All day";
-			} else if ($("#enter_hour").val() && $("#enter_hour").val() >= 0 && $("#enter_hour").val() <= 24) {
-				var entryDuration = addZero($("#enter_hour").val());
-			} else {
-				$(".duration").css('background', '#F7E8E8');
-				return 0;
-			}
-			if ($("#entry_location").val()) {
-				var entryLocation = $("#entry_location").val();
-			} else {
-				var entryLocation = "";
-			}
-			if ($("#entry_note").val()) {
-				var entryNote = $("#entry_note").val();
-			} else {
-				var entryNote = "";
-			}
-
-			var entryImg = this.state.file;
-			var entryColor = this.state.dColor;
-			var entry = { entryName: entryName, entryDate: entryDate, entryTime: entryTime, entryDuration: entryDuration, entryLocation: entryLocation, entryNote: entryNote, entryColor: entryColor, entryImg: entryImg };
-			this.state.entries.splice(0, 0, entry);
-
-			// clean and close entry page
-			$(".float").removeClass('rotate');
-			$("#add_entry").addClass('animated slideOutDown');
-			window.setTimeout(function () {
-				$("#add_entry").css('display', 'none');
-			}, 700);
-			$("#entry_name").val("");
-			$("#all-day").prop('checked', false); // unchecks checkbox
-			$("#not-all-day").css('display', 'block');
-			$("#enter_hour").val("");
-			$("#entry_location").val("");
-			$("#entry_note").val("");
-			// reset entry colors
-			var resColor = new resetColors();
-
-			return this.setState({ entries: this.state.entries }), this.setState(resColor);
-		}
-	},
-	deleteEntry: function deleteEntry(e) {
-		this.state.entries.splice(e, 1);
-		$(".float").removeClass('rotate');
-		$("#open_entry").addClass('animated slideOutDown');
-		$("#add_entry").addClass('animated slideOutDown');
-		window.setTimeout(function () {
-			$("#add_entry").css('display', 'none');
-			$("#open_entry").css('display', 'none');
-		}, 700);
-		$(".entry").css('background', 'none');
-		$("#entry_name").val("");
-		$("#all-day").prop('checked', false); // unchecks checkbox
-		$("#not-all-day").css('display', 'block');
-		$("#enter_hour").val("");
-		$("#entry_location").val("");
-		$("#entry_note").val("");
-		var resColor = new resetColors();
-		return this.setState({ entries: this.state.entries }), this.setState(resColor);
-	},
-	openEntry: function openEntry(entry, e) {
-		if ($(".float").hasClass('rotate')) {
-			$(".float").removeClass('rotate');
-			$("#open_entry").addClass('animated slideOutDown');
-			window.setTimeout(function () {
-				$("#open_entry").css('display', 'none');
-			}, 700);
-			$(".entry").css('background', 'none');
-			$("#" + e).css('background', 'none');
-		} else {
-			window.setTimeout(function () {
-				$("#open_entry").removeClass('animated slideOutDown');
-				$("#open_entry").addClass('animated slideInUp');
-				$("#open_entry").css('display', 'block');
-			}, 50);
-			$(".float").addClass('rotate');
-			$("#" + e).css('background', '#F1F1F1');
-			return this.setState({ openEntry: entry });
-		}
-	},
-	setColor: function setColor(color, state) {
-		switch (state) {
-			case 'color1':
-				var changeColor = { color: this.state.dColor.color };
-				var defColor = { color: color.color };
-				return this.setState({ dColor: defColor, color1: changeColor });
-				break;
-			case 'color2':
-				var changeColor = { color: this.state.dColor.color };
-				var defColor = { color: color.color };
-				return this.setState({ dColor: defColor, color2: changeColor });
-				break;
-			case 'color3':
-				var changeColor = { color: this.state.dColor.color };
-				var defColor = { color: color.color };
-				return this.setState({ dColor: defColor, color3: changeColor });
-				break;
-			case 'color4':
-				var changeColor = { color: this.state.dColor.color };
-				var defColor = { color: color.color };
-				return this.setState({ dColor: defColor, color4: changeColor });
-				break;
-			case 'color5':
-				var changeColor = { color: this.state.dColor.color };
-				var defColor = { color: color.color };
-				return this.setState({ dColor: defColor, color5: changeColor });
-				break;
-		}
-	},
-	handleImage: function handleImage(e) {
-		var _this = this;
-
-		e.preventDefault();
-		var reader = new FileReader();
-		var file = e.target.files[0];
-		if (file) {
-			reader.onloadend = function () {
-				var readerResult = reader.result;
-				var img = { file: file, readerResult: readerResult };
-				_this.setState({ file: img });
-			};
-			reader.readAsDataURL(file);
-		} else {
-			var img = {};
-			this.setState({ file: img });
-		}
-	},
-	openMenu: function openMenu() {
-		$("#menu").css('display', 'block');
-		$("#menu-content").addClass('animated slideInLeft');
-		$("#menu-content").css('display', 'block');
-	},
-	render: function render() {
-		var _this2 = this;
-
-		var calendar = [];
-		for (var property in this.state.dates.calendar) {
-			calendar.push(this.state.dates.calendar[property]);
-		}
-		var weekdays = Object.keys(this.state.dates.calendar);
-		var done = false;
-		var count = 0;
-		var daysBetween = '';
-		if (this.state.openEntry) {
-			var selectdDate = new Date(this.state.openEntry.entryDate.year, this.state.openEntry.entryDate.month, this.state.openEntry.entryDate.day);
-			if (selectdDate > this.state.present) {
-				daysBetween = Date.daysBetween(this.state.present, selectdDate);
-				if (daysBetween == 1) {
-					daysBetween = "Tomorrow";
-				} else {
-					daysBetween = daysBetween + " days to go";
-				}
-			} else if (selectdDate < this.state.present) {
-				daysBetween = Date.daysBetween(selectdDate, this.state.present);
-				if (daysBetween == 1) {
-					daysBetween = "Yesterday";
-				} else {
-					daysBetween = daysBetween + " days ago";
-				}
-			}
-			if (this.state.present.getDate() === this.state.openEntry.entryDate.day && this.state.present.getMonth() === this.state.openEntry.entryDate.month && this.state.present.getFullYear() === this.state.openEntry.entryDate.year) {
-				daysBetween = "Today";
-			}
-		}
-		return React.createElement(
-			'div',
-			null,
-			React.createElement(
-				'div',
-				{ id: 'calendar' },
-				React.createElement(
-					'div',
-					{ id: 'menu' },
-					React.createElement(
-						'div',
-						{ id: 'menu-content' },
-						React.createElement(
-							'div',
-							{ className: 'madeBy' },
-							React.createElement(
-								'div',
-								{ className: 'madeOverlay' },
-								React.createElement(
-									'span',
-									{ id: 'madeName' },
-									'Ricardo Barbosa'
-								),
-								React.createElement(
-									'span',
-									{ id: 'madeInfo' },
-									'WebDeveloper - Portugal'
-								),
-								React.createElement(
-									'span',
-									{ id: 'madeWeb' },
-									React.createElement(
-										'a',
-										{ target: '_blank', href: 'https://github.com/RicardoPBarbosa' },
-										React.createElement('i', { className: 'fa fa-github', 'aria-hidden': 'true' }),
-										' GitHub'
-									)
-								),
-								React.createElement(
-									'span',
-									{ id: 'madeWeb' },
-									React.createElement(
-										'a',
-										{ target: '_blank', href: 'http://codepen.io/RicardoBarbosa/' },
-										React.createElement('i', { className: 'fa fa-codepen', 'aria-hidden': 'true' }),
-										' CodePen'
-									)
-								)
-							),
-							React.createElement('img', { src: 'http://imgur.com/LOaisfQ.jpg', width: '260', height: '200' })
-						)
-					),
-					React.createElement('div', { id: 'click-close' })
-				),
-				React.createElement(
-					'div',
-					{ id: 'header' },
-					React.createElement('i', { className: 'fa fa-bars', 'aria-hidden': 'true', onClick: this.openMenu }),
-					React.createElement(
-						'p',
-						null,
-						this.state.dates.nameofmonth,
-						' ',
-						this.state.dates.year
-					),
-					React.createElement(
-						'div',
-						null,
-						React.createElement(
-							'i',
-							{ onClick: this.returnPresent, className: 'fa fa-calendar-o', 'aria-hidden': 'true' },
-							React.createElement(
-								'span',
-								null,
-								this.state.present.getDate()
-							)
-						)
-					),
-					React.createElement('i', { className: 'fa fa-search', 'aria-hidden': 'true' })
-				),
-				React.createElement(
-					'div',
-					{ id: 'add_entry' },
-					React.createElement(
-						'div',
-						{ className: 'enter_entry' },
-						React.createElement('input', { type: 'text', placeholder: 'Enter title', id: 'entry_name' }),
-						React.createElement(
-							'span',
-							{ id: 'save_entry', onClick: this.saveEntry.bind(null, this.state.currYear, this.state.currMonthN, this.state.currDay) },
-							'SAVE'
-						)
-					),
-					React.createElement(
-						'div',
-						{ className: 'entry_details' },
-						React.createElement(
-							'div',
-							null,
-							React.createElement(
-								'div',
-								{ className: 'entry_info first' },
-								React.createElement('i', { className: 'fa fa-image', 'aria-hidden': 'true' }),
-								React.createElement('input', { type: 'file', name: 'entry-img', id: 'entry-img', onChange: function onChange(e) {
-										return _this2.handleImage(e);
-									} }),
-								React.createElement(
-									'label',
-									{ htmlFor: 'entry-img', id: 'for_img' },
-									React.createElement(
-										'span',
-										{ id: 'file_name' },
-										'Choose an image'
-									)
-								),
-								React.createElement(
-									'span',
-									{ id: 'remove_img' },
-									'Remove'
-								)
-							),
-							React.createElement(
-								'div',
-								{ className: 'entry_info2 first second duration' },
-								React.createElement('i', { className: 'fa fa-clock-o', 'aria-hidden': 'true' }),
-								React.createElement('input', { className: 'toggle', type: 'checkbox', name: 'all-day', id: 'all-day' }),
-								React.createElement(
-									'p',
-									null,
-									'All-day'
-								),
-								React.createElement(
-									'div',
-									{ id: 'not-all-day' },
-									React.createElement(
-										'p',
-										{ id: 'select_hour' },
-										'Select hour'
-									),
-									React.createElement(
-										'p',
-										{ id: 'hour' },
-										React.createElement('input', { type: 'number', id: 'enter_hour', min: '0', max: '24' }),
-										' h'
-									)
-								)
-							),
-							React.createElement(
-								'div',
-								{ className: 'entry_info2' },
-								React.createElement('i', { className: 'fa fa-map-marker', 'aria-hidden': 'true' }),
-								React.createElement('input', { type: 'text', placeholder: 'Add location', id: 'entry_location' })
-							),
-							React.createElement(
-								'div',
-								{ className: 'entry_info2' },
-								React.createElement('i', { className: 'fa fa-pencil', 'aria-hidden': 'true' }),
-								React.createElement('textarea', { id: 'entry_note', cols: '35', rows: '2', placeholder: 'Add note' })
-							),
-							React.createElement(
-								'div',
-								{ className: 'entry_info colors' },
-								React.createElement('i', { className: 'fa fa-circle', 'aria-hidden': 'true', id: 'blue', style: this.state.dColor }),
-								React.createElement(
-									'p',
-									{ id: 'defColor' },
-									'Default color'
-								),
-								React.createElement(
-									'div',
-									null,
-									React.createElement(
-										'span',
-										null,
-										React.createElement('i', { onClick: this.setColor.bind(null, this.state.color1, "color1"), className: 'fa fa-circle', 'aria-hidden': 'true', style: this.state.color1 })
-									),
-									React.createElement(
-										'span',
-										null,
-										React.createElement('i', { onClick: this.setColor.bind(null, this.state.color2, "color2"), className: 'fa fa-circle', 'aria-hidden': 'true', style: this.state.color2 })
-									),
-									React.createElement(
-										'span',
-										null,
-										React.createElement('i', { onClick: this.setColor.bind(null, this.state.color3, "color3"), className: 'fa fa-circle', 'aria-hidden': 'true', style: this.state.color3 })
-									),
-									React.createElement(
-										'span',
-										null,
-										React.createElement('i', { onClick: this.setColor.bind(null, this.state.color4, "color4"), className: 'fa fa-circle', 'aria-hidden': 'true', style: this.state.color4 })
-									),
-									React.createElement(
-										'span',
-										null,
-										React.createElement('i', { onClick: this.setColor.bind(null, this.state.color5, "color5"), className: 'fa fa-circle', 'aria-hidden': 'true', style: this.state.color5 })
-									)
-								)
-							)
-						)
-					)
-				),
-				this.state.openEntry ? React.createElement(
-					'div',
-					{ id: 'open_entry' },
-					React.createElement(
-						'div',
-						{ className: 'entry_img', style: { backgroundColor: this.state.openEntry.entryColor.color } },
-						React.createElement(
-							'div',
-							{ className: 'overlay' },
-							React.createElement(
-								'div',
-								null,
-								React.createElement(
-									'p',
-									null,
-									React.createElement(
-										'span',
-										{ id: 'entry_title' },
-										this.state.openEntry.entryName
-									),
-									React.createElement(
-										'span',
-										{ id: 'entry_times' },
-										daysBetween,
-										' ',
-										this.state.openEntry.entryDuration === "All day" ? "| All day" : "at " + this.state.openEntry.entryDuration + ":00"
-									)
-								)
-							)
-						),
-						React.createElement('img', { src: this.state.openEntry.entryImg.readerResult, width: '400px', height: '300px' })
-					),
-					React.createElement(
-						'div',
-						{ className: 'entry openedEntry' },
-						React.createElement(
-							'div',
-							null,
-							React.createElement('i', { className: 'fa fa-map-marker', 'aria-hidden': 'true' }),
-							' ',
-							this.state.openEntry.entryLocation ? this.state.openEntry.entryLocation : React.createElement(
-								'span',
-								null,
-								'No location'
-							)
-						)
-					),
-					React.createElement(
-						'div',
-						{ className: 'entry openedEntry noteDiv' },
-						React.createElement(
-							'div',
-							null,
-							React.createElement('i', { className: 'fa fa-pencil', 'aria-hidden': 'true' }),
-							' ',
-							this.state.openEntry.entryNote ? React.createElement(
-								'span',
-								{ id: 'note' },
-								this.state.openEntry.entryNote
-							) : React.createElement(
-								'span',
-								null,
-								'No description'
-							)
-						)
-					)
-				) : null,
-				React.createElement(
-					'div',
-					{ id: 'arrows' },
-					React.createElement('i', { className: 'fa fa-arrow-left', 'aria-hidden': 'true', onClick: this.update.bind(null, "left") }),
-					React.createElement('i', { className: 'fa fa-arrow-right', 'aria-hidden': 'true', onClick: this.update.bind(null, "right") })
-				),
-				React.createElement(
-					'div',
-					{ id: 'dates' },
-					calendar.map(function (week, i) {
-						return React.createElement(
-							'div',
-							{ key: i },
-							React.createElement(
-								'p',
-								{ className: 'weekname' },
-								weekdays[i].substring(0, 3)
-							),
-							React.createElement(
-								'ul',
-								null,
-								week.map(function (day, k) {
-									var existEntry = {};
-									{
-										this.state.entries.map(function (entry, e) {
-											if (entry.entryDate.day == day && entry.entryDate.month == this.state.dates.numberofmonth && entry.entryDate.year == this.state.dates.year) {
-												existEntry = { borderWidth: "2px", borderStyle: "solid", borderColor: "#8DBEDE" };
-												return;
-											}
-										}.bind(this));
-									}
-									return React.createElement(
-										'li',
-										{ className: day === this.state.today.getDate() ? "today" : null, key: k, style: existEntry, onClick: this.selectedDay.bind(null, day) },
-										day
-									);
-								}.bind(this))
-							)
-						);
-					}.bind(this))
-				),
-				this.state.warning ? React.createElement(
-					'div',
-					{ className: 'warning' },
-					this.state.warning
-				) : null,
-				React.createElement(
-					'div',
-					{ id: 'ignoreOverflow' },
-					React.createElement(
-						'button',
-						{ className: 'float', onClick: this.addEntry.bind(null, this.state.today.getDate()) },
-						this.state.entry
-					)
-				)
-			),
-			this.state.currDay ? React.createElement(
-				'div',
-				{ id: 'entries' },
-				React.createElement(
-					'div',
-					{ className: 'contain_entries' },
-					React.createElement(
-						'div',
-						{ id: 'entries-header' },
-						React.createElement(
-							'p',
-							{ className: 'entryDay' },
-							this.state.currDay,
-							' ',
-							this.state.currMonth
-						),
-						this.state.present.getDate() === this.state.currDay && this.state.present.getMonth() === this.state.currMonthN && this.state.present.getFullYear() === this.state.currYear ? React.createElement(
-							'p',
-							{ className: 'currday' },
-							'TODAY'
-						) : null
-					),
-					this.state.entries != '' ? React.createElement(
-						'div',
-						null,
-						this.state.entries.map(function (entry, e) {
-							count++;
-							var entryFromThisDate = entry.entryDate.day === this.state.currDay && entry.entryDate.month === this.state.currMonthN && entry.entryDate.year === this.state.currYear ? true : false;
-							if (entryFromThisDate) {
-								// prevent the "no-entries" div to appear in the next entries that are not from this day
-								done = true;
-								var style = { borderLeftColor: entry.entryColor.color, borderLeftWidth: "4px", borderLeftStyle: "solid" };
-								return React.createElement(
-									'div',
-									{ className: 'entry', id: e, key: e },
-									React.createElement(
-										'div',
-										{ style: style },
-										React.createElement(
-											'div',
-											{ className: 'entry_left', onClick: this.openEntry.bind(null, entry, e) },
-											React.createElement(
-												'p',
-												{ className: 'entry_event' },
-												entry.entryName
-											),
-											React.createElement(
-												'p',
-												{ className: 'entry_time' },
-												entry.entryDuration === "All day" ? "All day" : entry.entryDuration + " h",
-												' ',
-												entry.entryLocation ? " | " + entry.entryLocation : null
-											)
-										),
-										React.createElement(
-											'div',
-											{ className: 'delete_entry' },
-											React.createElement('i', { className: 'fa fa-times', 'aria-hidden': 'true', onClick: this.deleteEntry.bind(null, e) })
-										)
-									)
-								);
-							}
-							if (count === this.state.entries.length) {
-								if (!done) {
-									done = true;
-									return React.createElement(
-										'div',
-										{ className: 'no-entries', key: e },
-										React.createElement('i', { className: 'fa fa-calendar-check-o', 'aria-hidden': 'true' }),
-										React.createElement(
-											'span',
-											null,
-											'No events planned for today'
-										)
-									);
-								}
-							}
-						}.bind(this))
-					) : React.createElement(
-						'div',
-						{ className: 'no-entries' },
-						React.createElement('i', { className: 'fa fa-calendar-check-o', 'aria-hidden': 'true' }),
-						React.createElement(
-							'span',
-							null,
-							'No events planned for today'
-						)
-					)
-				)
-			) : null
-		);
-	}
+//quicktmpl is a simple template language I threw together a while ago; it is not remotely secure to xss and probably has plenty of bugs that I haven't considered, but it basically works
+//the design is a function I read in a blog post by John Resig (http://ejohn.org/blog/javascript-micro-templating/) and it is intended to be loosely translateable to a more comprehensive template language like mustache easily
+$.extend({
+    quicktmpl: function (template) {return new Function("obj","var p=[],print=function(){p.push.apply(p,arguments);};with(obj){p.push('"+template.replace(/[\r\t\n]/g," ").split("{{").join("\t").replace(/((^|\}\})[^\t]*)'/g,"$1\r").replace(/\t:(.*?)\}\}/g,"',$1,'").split("\t").join("');").split("}}").join("p.push('").split("\r").join("\\'")+"');}return p.join('');")}
 });
-ReactDOM.render(React.createElement(Calendar, null), document.getElementById("app"));
 
-(function ($, undefined) {
-	$("#all-day").click(function () {
-		if (this.checked) {
-			$("#not-all-day").css('display', 'none');
-		} else {
-			$("#not-all-day").css('display', 'block');
-		}
-	});
+$.extend(Date.prototype, {
+  //provides a string that is _year_month_day, intended to be widely usable as a css class
+  toDateCssClass:  function () { 
+    return '_' + this.getFullYear() + '_' + (this.getMonth() + 1) + '_' + this.getDate(); 
+  },
+  //this generates a number useful for comparing two dates; 
+  toDateInt: function () { 
+    return ((this.getFullYear()*12) + this.getMonth())*32 + this.getDate(); 
+  },
+  toTimeString: function() {
+    var hours = this.getHours(),
+        minutes = this.getMinutes(),
+        hour = (hours > 12) ? (hours - 12) : hours,
+        ampm = (hours >= 12) ? ' pm' : ' am';
+    if (hours === 0 && minutes===0) { return ''; }
+    if (minutes > 0) {
+      return hour + ':' + minutes + ampm;
+    }
+    return hour + ampm;
+  }
+});
 
-	$("#click-close").click(function () {
-		$("#menu-content").removeClass('animated slideInLeft');
-		$("#menu-content").addClass('animated slideOutLeft');
-		window.setTimeout(function () {
-			$("#menu").css('display', 'none');
-			$("#menu-content").css('display', 'none');
-			$("#menu-content").removeClass('animated slideOutLeft');
-		}, 750);
-	});
 
-	$("#entry-img").bind('change', function (e) {
-		var label = this.nextElementSibling;
-		var fileName = '';
-		if (this.files) {
-			fileName = e.target.value.split('\\').pop();
-		} else {
-			fileName = '';
-		}
-		if (fileName != '') {
-			label.querySelector('span').innerHTML = fileName;
-		} else {
-			label.querySelector('span').innerHTML = "Choose an image";
-		}
-	});
+(function ($) {
 
-	function hypot(x, y) {
-		return Math.sqrt(x * x + y * y);
-	}
-
-	$("button").each(function (el) {
-		var self = $(this),
-		    html = self.html();
-
-		self.html("").append($('<div class="btn"/>').html(html));
-	}).append($('<div class="ink-visual-container"/>').append($('<div class="ink-visual-static"/>'))).on("mousedown touchstart", function (evt) {
-		event.preventDefault();
-
-		var self = $(this),
-		    container = self.find(".ink-visual-static", true).eq(0);
-
-		if (!container.length) return;
-
-		container.find(".ink-visual").addClass("hide");
-
-		var rect = this.getBoundingClientRect(),
-		    cRect = container[0].getBoundingClientRect(),
-		    cx,
-		    cy,
-		    radius,
-		    diam;
-
-		if (event.changedTouches) {
-			cx = event.changedTouches[0].clientX;
-			cy = event.changedTouches[0].clientY;
-		} else {
-			cx = event.clientX;
-			cy = event.clientY;
-		}
-
-		if (self.is(".float")) {
-			var rx = rect.width / 2,
-			    ry = rect.height / 2,
-			    br = (rx + ry) / 2,
-			    mx = rect.left + rx,
-			    my = rect.top + ry;
-
-			radius = hypot(cx - mx, cy - my) + br;
-		}
-		diam = radius * 2;
-
-		var el = $('<div class="ink-visual"/>').width(diam).height(diam).css("left", cx - cRect.left - radius).css("top", cy - cRect.top - radius).on("animationend webkitAnimationEnd oanimationend MSAnimationEnd", function () {
-			var self2 = $(this);
-
-			switch (event.animationName) {
-				case "ink-visual-show":
-					if (self.is(":active")) self2.addClass("shown");
-					break;
-
-				case "ink-visual-hide":
-					self2.remove();
-					break;
-			}
-		}).on("touchend", function () {
-			event.preventDefault();
-		});
-
-		container.append(el);
-	});
-
-	$(window).on("mouseup touchend", function (evt) {
-		$(".ink-visual-static").children(".ink-visual").addClass("hide");
-	}).on("select selectstart", function (evt) {
-		event.preventDefault();return false;
-	});
+  //t here is a function which gets passed an options object and returns a string of html. I am using quicktmpl to create it based on the template located over in the html block
+  var t = $.quicktmpl($('#tmpl').get(0).innerHTML);
+  
+  function calendar($el, options) {
+    //actions aren't currently in the template, but could be added easily...
+    $el.on('click', '.js-cal-prev', function () {
+      switch(options.mode) {
+      case 'year': options.date.setFullYear(options.date.getFullYear() - 1); break;
+      case 'month': options.date.setMonth(options.date.getMonth() - 1); break;
+      case 'week': options.date.setDate(options.date.getDate() - 7); break;
+      case 'day':  options.date.setDate(options.date.getDate() - 1); break;
+      }
+      draw();
+    }).on('click', '.js-cal-next', function () {
+      switch(options.mode) {
+      case 'year': options.date.setFullYear(options.date.getFullYear() + 1); break;
+      case 'month': options.date.setMonth(options.date.getMonth() + 1); break;
+      case 'week': options.date.setDate(options.date.getDate() + 7); break;
+      case 'day':  options.date.setDate(options.date.getDate() + 1); break;
+      }
+      draw();
+    }).on('click', '.js-cal-option', function () {
+      var $t = $(this), o = $t.data();
+      if (o.date) { o.date = new Date(o.date); }
+      $.extend(options, o);
+      draw();
+    }).on('click', '.js-cal-years', function () {
+      var $t = $(this), 
+          haspop = $t.data('popover'),
+          s = '', 
+          y = options.date.getFullYear() - 2, 
+          l = y + 5;
+      if (haspop) { return true; }
+      for (; y < l; y++) {
+        s += '<button type="button" class="btn btn-default btn-lg btn-block js-cal-option" data-date="' + (new Date(y, 1, 1)).toISOString() + '" data-mode="year">'+y + '</button>';
+      }
+      $t.popover({content: s, html: true, placement: 'auto top'}).popover('toggle');
+      return false;
+    }).on('click', '.event', function () {
+      var $t = $(this), 
+          index = +($t.attr('data-index')), 
+          haspop = $t.data('popover'),
+          data, time;
+          
+      if (haspop || isNaN(index)) { return true; }
+      data = options.data[index];
+      time = data.start.toTimeString();
+      if (time && data.end) { time = time + ' - ' + data.end.toTimeString(); }
+      $t.data('popover',true);
+      $t.popover({content: '<p><strong>' + time + '</strong></p>'+data.text, html: true, placement: 'auto left'}).popover('toggle');
+      return false;
+    });
+    function dayAddEvent(index, event) {
+      if (!!event.allDay) {
+        monthAddEvent(index, event);
+        return;
+      }
+      var $event = $('<div/>', {'class': 'event', text: event.title, title: event.title, 'data-index': index}),
+          start = event.start,
+          end = event.end || start,
+          time = event.start.toTimeString(),
+          hour = start.getHours(),
+          timeclass = '.time-22-0',
+          startint = start.toDateInt(),
+          dateint = options.date.toDateInt(),
+          endint = end.toDateInt();
+      if (startint > dateint || endint < dateint) { return; }
+      
+      if (!!time) {
+        $event.html('<strong>' + time + '</strong> ' + $event.html());
+      }
+      $event.toggleClass('begin', startint === dateint);
+      $event.toggleClass('end', endint === dateint);
+      if (hour < 6) {
+        timeclass = '.time-0-0';
+      }
+      if (hour < 22) {
+        timeclass = '.time-' + hour + '-' + (start.getMinutes() < 30 ? '0' : '30');
+      }
+      $(timeclass).append($event);
+    }
+    
+    function monthAddEvent(index, event) {
+      var $event = $('<div/>', {'class': 'event', text: event.title, title: event.title, 'data-index': index}),
+          e = new Date(event.start),
+          dateclass = e.toDateCssClass(),
+          day = $('.' + e.toDateCssClass()),
+          empty = $('<div/>', {'class':'clear event', html:'&nbsp;'}), 
+          numbevents = 0, 
+          time = event.start.toTimeString(),
+          endday = event.end && $('.' + event.end.toDateCssClass()).length > 0,
+          checkanyway = new Date(e.getFullYear(), e.getMonth(), e.getDate()+40),
+          existing,
+          i;
+      $event.toggleClass('all-day', !!event.allDay);
+      if (!!time) {
+        $event.html('<strong>' + time + '</strong> ' + $event.html());
+      }
+      if (!event.end) {
+        $event.addClass('begin end');
+        $('.' + event.start.toDateCssClass()).append($event);
+        return;
+      }
+            
+      while (e <= event.end && (day.length || endday || options.date < checkanyway)) {
+        if(day.length) { 
+          existing = day.find('.event').length;
+          numbevents = Math.max(numbevents, existing);
+          for(i = 0; i < numbevents - existing; i++) {
+            day.append(empty.clone());
+          }
+          day.append(
+            $event.
+            toggleClass('begin', dateclass === event.start.toDateCssClass()).
+            toggleClass('end', dateclass === event.end.toDateCssClass())
+          );
+          $event = $event.clone();
+          $event.html('&nbsp;');
+        }
+        e.setDate(e.getDate() + 1);
+        dateclass = e.toDateCssClass();
+        day = $('.' + dateclass);
+      }
+    }
+    function yearAddEvents(events, year) {
+      var counts = [0,0,0,0,0,0,0,0,0,0,0,0];
+      $.each(events, function (i, v) {
+        if (v.start.getFullYear() === year) {
+            counts[v.start.getMonth()]++;
+        }
+      });
+      $.each(counts, function (i, v) {
+        if (v!==0) {
+            $('.month-'+i).append('<span class="badge">'+v+'</span>');
+        }
+      });
+    }
+    
+    function draw() {
+      $el.html(t(options));
+      //potential optimization (untested), this object could be keyed into a dictionary on the dateclass string; the object would need to be reset and the first entry would have to be made here
+      $('.' + (new Date()).toDateCssClass()).addClass('today');
+      if (options.data && options.data.length) {
+        if (options.mode === 'year') {
+            yearAddEvents(options.data, options.date.getFullYear());
+        } else if (options.mode === 'month' || options.mode === 'week') {
+            $.each(options.data, monthAddEvent);
+        } else {
+            $.each(options.data, dayAddEvent);
+        }
+      }
+    }
+    
+    draw();    
+  }
+  
+  ;(function (defaults, $, window, document) {
+    $.extend({
+      calendar: function (options) {
+        return $.extend(defaults, options);
+      }
+    }).fn.extend({
+      calendar: function (options) {
+        options = $.extend({}, defaults, options);
+        return $(this).each(function () {
+          var $this = $(this);
+          calendar($this, options);
+        });
+      }
+    });
+  })({
+    days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    shortMonths: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    date: (new Date()),
+        daycss: ["c-sunday", "", "", "", "", "", "c-saturday"],
+        todayname: "Today",
+        thismonthcss: "current",
+        lastmonthcss: "outside",
+        nextmonthcss: "outside",
+    mode: "month",
+    data: []
+  }, jQuery, window, document);
+    
 })(jQuery);
+
+var data = [],
+    slipsum = ["Now that we know who you are, I know who I am. I'm not a mistake! It all makes sense! In a comic, you know how you can tell who the arch-villain's going to be? He's the exact opposite of the hero. And most times they're friends, like you and me! I should've known way back when... You know why, David? Because of the kids. They called me Mr Glass.", "You see? It's curious. Ted did figure it out - time travel. And when we get back, we gonna tell everyone. How it's possible, how it's done, what the dangers are. But then why fifty years in the future when the spacecraft encounters a black hole does the computer call it an 'unknown entry event'? Why don't they know? If they don't know, that means we never told anyone. And if we never told anyone it means we never made it back. Hence we die down here. Just as a matter of deductive logic.", "Your bones don't break, mine do. That's clear. Your cells react to bacteria and viruses differently than mine. You don't get sick, I do. That's also clear. But for some reason, you and I react the exact same way to water. We swallow it too fast, we choke. We get some in our lungs, we drown. However unreal it may seem, we are connected, you and I. We're on the same curve, just on opposite ends.", "Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing.", "Yeah, I like animals better than people sometimes... Especially dogs. Dogs are the best. Every time you come home, they act like they haven't seen you in a year. And the good thing about dogs... is they got different dogs for different people. Like pit bulls. The dog of dogs. Pit bull can be the right man's best friend... or the wrong man's worst enemy. You going to give me a dog for a pet, give me a pit bull. Give me... Raoul. Right, Omar? Give me Raoul.", "Like you, I used to think the world was this great place where everybody lived by the same standards I did, then some kid with a nail showed me I was living in his world, a world where chaos rules not order, a world where righteousness is not rewarded. That's Cesar's world, and if you're not willing to play by his rules, then you're gonna have to pay the price.", "You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man.", "You see? It's curious. Ted did figure it out - time travel. And when we get back, we gonna tell everyone. How it's possible, how it's done, what the dangers are. But then why fifty years in the future when the spacecraft encounters a black hole does the computer call it an 'unknown entry event'? Why don't they know? If they don't know, that means we never told anyone. And if we never told anyone it means we never made it back. Hence we die down here. Just as a matter of deductive logic.", "Like you, I used to think the world was this great place where everybody lived by the same standards I did, then some kid with a nail showed me I was living in his world, a world where chaos rules not order, a world where righteousness is not rewarded. That's Cesar's world, and if you're not willing to play by his rules, then you're gonna have to pay the price.", "You think water moves fast? You should see ice. It moves like it has a mind. Like it knows it killed the world once and got a taste for murder. After the avalanche, it took us a week to climb out. Now, I don't know exactly when we turned on each other, but I know that seven of us survived the slide... and only five made it out. Now we took an oath, that I'm breaking now. We said we'd say it was the snow that killed the other two, but it wasn't. Nature is lethal but it doesn't hold a candle to man."];
+
+  for(var i = 1; i < arrtitle.length; i++) {
+    data.push({ title: arrtitle[i], start: new Date(arrstartdate[i]), end: new Date(arrenddate[i]), allDay: 0, text: arrdescription[i]});
+  }
+  
+  data.sort(function(a,b) { return (+a.start) - (+b.start); });
+  
+//data must be sorted by start date
+
+//Actually do everything
+$('#holder').calendar({
+  data: data
+});

@@ -2,14 +2,28 @@
 	require_once __DIR__ . '/db_config.php';
 	
 	session_start();
-	$user = "ldmolwana2@gmail.com";
+	$myArray = explode('|', $_SESSION['login_user']);
 
-	$query1 = "SELECT CONCAT(CUSTOMER.CUST_FNAME,', ',CUSTOMER.CUST_LNAME), CUSTOMER.CUST_ADDRESS, CUSTOMER.CUST_PHONE 
-				FROM britehousedeliverymanagement.CUSTOMER 
-				WHERE CUSTOMER.CUST_EMAIL='$user'";
-	$query4 = "CALL select_delivery()";
-	$result1 = mysqli_query($conn, $query1);
-	$result5 = mysqli_query($conn, $query4);
+	$myusername = $myArray[0];
+
+	$sql = "SELECT CUSTOMER.CUST_FNAME, CUSTOMER.CUST_LNAME, CUSTOMER.CUST_ADDRESS, CUSTOMER.CUST_PHONE 
+            FROM britehousedeliverymanagement.CUSTOMER 
+            WHERE CUSTOMER.CUST_EMAIL = '$myusername'";
+
+    $user_name = $myArray[0];
+	$user_address = $myArray[1];
+	$user_phone = $myArray[2];
+	$user_email = $myArray[3];
+
+	$query44 = "SELECT CONCAT('ORD#', PRODUCT.PROD_ID),PRODUCT.PROD_REQ_DATE,DELIVERY.DEL_STATUS,
+		CONCAT(CUSTOMER.CUST_LNAME,' - (PHONE: ',CUSTOMER.CUST_PHONE,')')
+		FROM britehousedeliverymanagement.product 
+		NATURAL JOIN britehousedeliverymanagement.delivery
+		NATURAL JOIN britehousedeliverymanagement.customer
+		WHERE CUSTOMER.CUST_EMAIL = '$user_email'
+		ORDER BY PRODUCT.PROD_DESCR;";
+	$result55 = mysqli_query($conn, $query44);
+	$result66 = mysqli_query($conn, $query44);
 ?>
 
 <!DOCTYPE html>
@@ -34,14 +48,11 @@
 
 		<div id="green-bar"></div>
 
-		<div id="log-bar">
+		<div id="log-bar" style="margin-left: 92%;">
 			<table>
 				<tbody>
 					<tr>
-						<td>Username:</td><td><input type="text" name="txtusername" id="txtusername"></td>
-						<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword"></td>
-						<td><input type="submit" value="LOGIN" onclick="login()" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
-						<td><input type="button" value="REGISTER" style="background-color: grey; color: white; border-color: grey; border-radius: 3px;"></td>
+						<td><input type="submit" value="LOGOUT" onclick="logout()" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
 						<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px;"></td>
 					</tr>
 				</tbody>
@@ -60,8 +71,8 @@
 
 		}
 
-		function login() {
-			alert("txtusername");
+		function logout() {
+			window.location.href = 'customer_login.php';
 		}
 
 		function savecustomer() {
@@ -106,20 +117,20 @@
 														<td>
 															<table style="margin-left: 10px;">
 																<tbody>
+																	<?php if($row1 = mysqli_fetch_array($result55)):;?>
 																	<div style="text-align: left; margin-bottom: 10px;">
-																		<label style="margin-left: 5px;">ORD#101701</label>
+																		<label style="margin-left: 5px;"><?php echo $row1[0];?></label>
 																	</div>
 																	<div style="text-align: left; margin-bottom: 10px;">
-																		<label style="margin-left: 5px;">2017-09-19 14:05</label>
+																		<label style="margin-left: 5px;"><?php echo $row1[1];?></label>
 																	</div>
 																	<div style="text-align: left; margin-bottom: 10px;">
-																		<label style="margin-left: 5px;">ASSEMBLING</label>
+																		<label style="margin-left: 5px;"><?php echo $row1[2];?></label>
 																	</div>
 																	<div style="text-align: left; margin-bottom: 10px;">
-																		<?php if($row1 = mysqli_fetch_array($result5)):;?>
-																		<label style="margin-left: 5px;"><?php echo $row1[7];?></label>
-																		<?php endif;?>
+																		<label style="margin-left: 5px;"><?php echo $row1[3];?></label>
 																	</div>
+																	<?php endif;?>
 																</tbody>
 															</table>
 														</td>
@@ -147,19 +158,17 @@
 															<table style="margin-left: 10px;">
 																<tbody>
 																	<tr>
-																		<?php if($row1 = mysqli_fetch_array($result1)):;?>
-																			<div style="text-align: left; margin-bottom: 10px;">
-																				<label style="margin-left: 5px; text-transform: uppercase;"><?php echo $row1[0];?></label>
-																			</div>
-																			<div style="text-align: left; margin-bottom: 10px;">
-																				<label style="margin-left: 5px; text-transform: uppercase;"><?php echo $row1[1];?></label>
-																			</div>
-																			<div style="text-align: left; margin-bottom: 10px;">
-																				<label style="margin-left: 5px;"><?php echo $row1[2];?></label>
-																			</div>
-																		<?php endif;?>
 																		<div style="text-align: left; margin-bottom: 10px;">
-																			<label style="margin-left: 5px;">ldmolwana@gmail.com</label>
+																			<label style="margin-left: 5px; text-transform: uppercase;"><?php echo $user_name?></label>
+																		</div>
+																		<div style="text-align: left; margin-bottom: 10px;">
+																			<label style="margin-left: 5px; text-transform: uppercase;"><?php echo $user_address?></label>
+																		</div>
+																		<div style="text-align: left; margin-bottom: 10px;">
+																			<label style="margin-left: 5px;"><?php echo $user_phone?></label>
+																		</div>
+																		<div style="text-align: left; margin-bottom: 10px;">
+																			<label style="margin-left: 5px;"><?php echo $user_email?></label>
 																		</div>
 																	</tr>
 																</tbody>
@@ -191,12 +200,12 @@
 							  <div id="tbl-content" style="height: 272px;">
 							    <table cellpadding="0" cellspacing="0" border="0">
 							      <tbody>
-							        <?php while($row1 = mysqli_fetch_array($result5)):;?>
+							        <?php while($row1 = mysqli_fetch_array($result66)):;?>
 										<tr>
 											<td><?php echo $row1[0];?></td>
 											<td><?php echo $row1[2];?></td>
 											<td>R 150.00</td>
-											<td><?php echo $row1[6];?></td>
+											<td><?php echo $row1[3];?></td>
 											<td><input type="submit" value="VIEW DETAILS" style="width: 100px;"></td>
 										</tr>
 									<?php endwhile;?>

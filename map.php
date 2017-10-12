@@ -8,6 +8,7 @@
 	    // username and password sent from form
 
 	    $truckid =  mysqli_real_escape_string($conn,$_POST['truckid']);
+	    $defaultlocation = 'loggedinadmin.php';
 
 	    $sql = "SELECT LOCATION.LOC_LATITUDE, LOCATION.LOC_LONGITUDE FROM LOCATION WHERE LOCATION.LOC_ID = '$truckid'";
 
@@ -24,14 +25,7 @@
 	            $location_latitude = $row["LOC_LATITUDE"];
             	$location_longitude = $row["LOC_LONGITUDE"];
 	        }
-	    }
-	    // If result matched $myusername and $mypassword, table row must be 1 row
-
-	    if($count == 1) {
-	        
-	    }else {
-	        session_start();
-	        header("location: loggedinadmin.php");
+	        session_start();      
 	    }
 	}
 ?>
@@ -110,6 +104,7 @@
 
 	        // Try HTML5 geolocation.
 	        if (navigator.geolocation) {
+	        	var timeoutVal = 10 * 1000 * 1000;
 	          navigator.geolocation.getCurrentPosition(function(position) {
 	            var pos = {
 	              lat: carLatitude,
@@ -122,7 +117,7 @@
 	            map.setCenter(pos);
 	          }, function() {
 	            handleLocationError(true, infoWindow, map.getCenter());
-	          });
+	          }, {enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0});
 	        } else {
 	          // Browser doesn't support Geolocation
 	          handleLocationError(false, infoWindow, map.getCenter());

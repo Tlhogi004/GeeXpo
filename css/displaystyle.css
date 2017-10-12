@@ -1,0 +1,163 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #3b3b3b;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  background: #2b2b2b;
+}
+
+.wrapper {
+  width: 100%;
+  height: 100%;
+  color: black;
+}
+
+.table {
+  vertical-align: top;
+  margin: 0 0 0px 0;
+  width: 100%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  display: table;
+  height: 500px;
+  color: black;
+}
+@media screen and (max-width: 580px) {
+  .table {
+    display: block;
+  }
+}
+
+.row2 {
+  margin-left: 0px;
+  display: table;
+  background: black;
+  width: 100%;
+  height: 500px;
+}
+.row2:nth-of-type(odd) {
+  background: #e9e9e9;
+}
+.row2.header {
+  font-weight: 900;
+  color: #ffffff;
+  background: #ea6153;
+  height: 40px;
+  text-align: left;
+}
+.row2.green {
+  background: #27ae60;
+}
+.row2.blue {
+  background: #2980b9;
+}
+@media screen and (max-width: 580px) {
+  .row2 {
+    padding: 8px 0;
+    display: block;
+  }
+}
+
+.cell {
+  padding: 6px 12px;
+  display: table-cell;
+}
+@media screen and (max-width: 580px) {
+  .cell {
+    padding: 2px 12px;
+    display: block;
+  }
+}
+
+/*STYLESHEET 2*/
+.promos {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+.promo {
+  margin: 1em .5em 1.625em;
+  padding: .25em 0 2em;
+  background: #0F1012;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.625;
+  color: #f9f9f9;
+  text-align: center;
+}
+
+@media (min-width: 40em) {
+  .promo {
+    display: inline;
+    float: left;
+    width: 33.333%;
+    margin: 1em 0 0;
+  }
+  .promo.first {
+    border-right: none;
+  }
+  .promo.second {
+    float: right;
+    border-left: none;
+  }
+}
+.promo h4 {
+  margin: .25em 0 0;
+  font-size: 170%;
+  font-weight: normal;
+}
+.promo .features {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  color: #999999;
+}
+.promo li {
+  padding: .25em 0;
+}
+.promo #orderstatus1 {
+  color: #f9f9f9;
+}
+.promo #ordernumber, #customernumber, #vehiclereg {
+  margin: .5em 0;
+  padding: .25em 0;
+  background: #292b2e;
+  font-size: 250%;
+  color: #f9f9f9;
+  width: 100%;
+}
+.promo .buy {
+  margin: 1em 0 0;
+}
+.promo .buy #editorder input[type="submit"] {
+  padding: 1em 3.25em;
+  border: none;
+  border-radius: 40px;
+  background: #292b2e;
+  color: #f9f9f9;
+  cursor: pointer;
+  width: 200px;
+}
+.promo .buy #editorder input[type="submit"]:hover {
+  background: #27282b;
+}
+
+.scale .buy #editorder input[type="submit"] {
+  background: #64AAA4;
+}
+.scale .buy #editorder input[type="submit"]:hover {
+  background: #4e8d88;
+}
+@media (min-width: 40em) {
+  .scale {
+    transform: scale(1.2);
+    box-shadow: 0 0 4px 1px rgba(20, 20, 20, 0.8);
+    height: 400px;
+  }
+  .scale #ordernumber, #customernumber, #vehiclereg {
+    color: #64AAA4;
+  }
+}
+

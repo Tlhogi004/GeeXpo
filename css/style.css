@@ -17,7 +17,7 @@ body{
   overflow-x: hidden;
 }
 form#signup-form {
-  background: #616161;
+  background: white;
   padding: 4em 4em 1px;
   max-width: 900px;
   margin: 20px auto 0;
@@ -26,11 +26,11 @@ form#signup-form {
 }
 
 form#order_entry_form {
-  background: #616161;
+  background: white;
   padding: 4em 4em 1px;
   max-width: 900px;
-  margin: 20px auto 0;
-  box-shadow: 0 0 1em #222;
+  margin: 0px auto 0;
+  box-shadow: 0 0.5em 1em #222;
   border-radius: 2px;
 }
 
@@ -48,7 +48,7 @@ form#order_entry_form h2 {
   padding: 10px;
   text-align: left;
   font-size: 30px;
-  color: white;
+  color: grey;
   border-bottom: solid 1px #e5e5e5;
 }
 
@@ -118,54 +118,45 @@ form#signup-form span {
 }
 
 form#order_entry_form input[type="submit"] {
-  background: linear-gradient(#64B5F6, #1A237E);
-  box-shadow: 0 3px 0 0 green;
-  border-radius: 2px;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  display: block;
-  font-size: 2em;
-  line-height: 1.6em;
-  margin: 2em 0 0;
-  margin-top: 0;
-  outline: none;
-  padding: .8em 0;
-  text-shadow: 0 1px #68B25B;
+  width: 200px;
+  text-align: center;
+  display: inline; 
+  vertical-align: top; 
+  line-height: 30px; 
+  margin-top: 5px; 
+  background: lightblue; 
+  border:none; 
+  border-radius: 5px; 
+  font-size: 13.333px; 
+  color: white;
 }
 
 form#signup-form input[type="submit"] {
-  background: linear-gradient(#64B5F6, #1A237E);
-  box-shadow: 0 3px 0 0 green;
-  border-radius: 2px;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  display: block;
-  font-size: 2em;
-  line-height: 1.6em;
-  margin: 2em 0 0;
-  margin-top: 0;
-  outline: none;
-  padding: .8em 0;
-  text-shadow: 0 1px #68B25B;
+  width: 200px;
+  text-align: center;
+  display: inline; 
+  vertical-align: top; 
+  line-height: 30px; 
+  margin-top: 5px; 
+  background: lightblue; 
+  border:none; 
+  border-radius: 5px; 
+  font-size: 13.333px; 
+  color: white;
 }
 
 form#order_entry_form input[type="submit"] {
-  background: linear-gradient(#64B5F6, #1A237E);
-  box-shadow: 0 3px 0 0 green;
-  border-radius: 2px;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  display: block;
-  font-size: 2em;
-  line-height: 1.6em;
-  margin: 2em 0 0;
-  margin-top: 0;
-  outline: none;
-  padding: .8em 0;
-  text-shadow: 0 1px #68B25B;
+  width: 200px;
+  text-align: center;
+  display: inline; 
+  vertical-align: top; 
+  line-height: 30px; 
+  margin-top: 5px; 
+  background: lightblue; 
+  border:none; 
+  border-radius: 5px; 
+  font-size: 13.333px; 
+  color: white;
 }
 
 form#order_entry_form input[type="submit"]:hover {
@@ -235,6 +226,31 @@ header{
   margin: 0 auto;
   margin-top: 50px;
 }
+.box {
+  -webkit-transition: all 0.25s ease-in-out;
+  -moz-transition: all 0.25s ease-in-out;
+  transition: all 0.25s ease-in-out;
+}
+.box {
+  margin: 0 auto;
+  margin-left: 0;
+  display: block;
+  position: relative;
+  width: 401px;
+  height: 0px;
+  top: 30px;
+  opacity: 0.2;
+  background-color: #fafafa;
+  font: 1em 'Open Sans';
+  text-align: center;
+  line-height: 30px;
+  color: #345;
+  overflow: hidden;
+}
+.box.open {
+  height: 30px;
+  opacity: 1;
+}
 #top-div{
   display: inline;
   padding: 0px;
@@ -266,7 +282,7 @@ header{
   margin-top: 10px;
 }
 
-#body-nav ul, #side-bar-left ul {
+#side-bar-left ul {
   position: relative;
   margin-top: 0px;
   background: #005566;
@@ -276,6 +292,7 @@ header{
 }
 
 #side-bar-left ul li{
+  position: relative;
   background: #005566;
   color: #056D80;
   border-top: 1px solid rgba(69, 74, 84, 0.7);
@@ -284,48 +301,63 @@ header{
   width: 195.39px;
   height: 30px;
   line-height: 30px;
-  font-size: 0.9em;
 }
 
-#side-bar-left ul li a, {
-  background: #1A237E;
-}
-
-#body-nav ul li{
+#side-bar-left ul li ul {
   position: relative;
-  text-align: center;
-  float: left;
-  width: 20%;
-  height: 30px;
-  background: linear-gradient(#64B5F6, #1A237E);
-  line-height: 30px;
-  font-size: 0.9em;
+  margin-top: 0px;
+  background: #005566;
+  color: #056D80;
+  padding: 0px;
+  list-style: none;
 }
 
-#body-nav ul li a{
-  text-decoration: none;
-  color: white;
-  display: block; 
+#side-bar-left ul li a {
+  font-size: 12px;
+  font-weight: bold;
+  font-family: Helvetica;
 }
-
-#body-nav ul li a:hover {
-  background: linear-gradient(#AEEA00, #C6FF00);
-}
-
-#body-nav ul li ul li {
-  width: 100%;
-  background-color: orange;
-  margin-top: 0;
-  text-align: center;
+#side-bar-left ul li ul li {
   display: none;
-  z-index: 1000;
+  z-index: 9000;
 }
-
-#body-nav ul li:hover ul li{
+#side-bar-left ul li:hover ul li {
   display: block;
-  text-overflow: all;
 }
-
+#side-bar-left ul li ul li:hover {
+  position: relative;
+  background: lightgrey;
+}
+#side-bar-left ul li ul a {
+  font-size: 12px;
+  font-family: sans-serif;
+  margin-left: 10px;
+}
+#body-nav ul {
+  text-align: left;
+  display: inline;
+  margin: 0;
+  padding: 15px 4px 17px 0;
+  list-style: none;
+}
+#body-nav ul li {
+  font: bold 12px/18px Arial;
+  margin-right: 10px;
+  margin-left: 10px;
+  margin-top: 20px;
+  float: left;
+  padding: 15px 20px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 130px;
+  text-align: center;
+}
+#body-nav ul li:hover {
+  border: 1px solid lightgrey;
+  color: #fff;
+  border-radius: 40px;
+}
 #lightblue-bar {
   background: linear-gradient(#64B5F6, #64B5F6);
   color: white;
@@ -336,11 +368,12 @@ header{
 }
 
 #body-nav {
-  background: linear-gradient(#64B5F6, #64B5F6);
+  background: white;
   color: white;
-  width: 90%;
+  width: auto;
   margin: 0 auto;
   margin-top: 0px; 
+  height: 60px;
 }
 
 #body-middle-div {
@@ -417,14 +450,17 @@ td {
   color: black;
 }
 td input[type="submit"] {
-  background-color: #00a651;
-  box-shadow: 0 3px 0 0 green;
-  border-radius: 2px;
-  border: none;
-  color: #fff;
-  cursor: pointer;
-  outline: none;
-  text-shadow: 0 1px #68B25B;
+  width: 200px;
+  text-align: center;
+  display: inline; 
+  vertical-align: top; 
+  line-height: 30px; 
+  margin-top: 5px; 
+  background: lightblue; 
+  border:none; 
+  border-radius: 5px; 
+  font-size: 13.333px; 
+  color: white;
 }
 
 td li:hover {
@@ -451,32 +487,76 @@ aside#left-side-bar {
 
 article#about-article {
   float: left;
-  width: 65%;
+  width: 75%;
   margin-top: 1px; 
 }
 
-#right-side-bar-dark {
-  padding: 5px;
-  margin-top: 8px;
-  margin-bottom: 8px;
-  background: linear-gradient(#64B5F6, #000000);
-  border:0;
-  padding-left: 20px;
-  padding-right: 20px;
-  color: white;
+article#about-article-right-float, article#about-developer {
+  float: left;
+  width: 20%;
+  color: black;
+  margin-top: 20px;
+  margin-left: 35px;
 }
 
-#about-article-dark {
+article#about-article-right-float li {
+  text-decoration: none;
+  margin-bottom: 10px;
+  font-family: Arial;
+  font-size: 13.3333px;
+  text-align: justify;
+}
+
+article#heading {
+  float: left;
+  width: 100%; 
+  background: linear-gradient(purple, purple);
+}
+article#heading h1 {
+  padding: 20px;
+  padding-bottom: 5px;
+  font-family: Arial;
+  font-size: 18px;
+  font-weight: bold;
+}
+article#heading p {
+  font-family: Arial;
+  font-size: 13.3333px;
+  font-weight: 500;
+}
+#about-heading {
   padding: 5px;
-  background: linear-gradient(#64B5F6, #000000);
   border:0;
+  float: left;
+  width: 50%;
   padding-left: 20px;
   padding-right: 20px;
   color: white;
+  text-align: justify;
+}
+
+#about-article-mission, #about-article-vision, #about-article-map {
+  padding: 5px;
+  border:0;
+  padding-left: 20px;
+  padding-right: 20px;
+  color: black;
+  text-align: justify;
+}
+#about-article h1 {
+  font-family: Arial;
+  font-size: 16px;
+  font-weight: bold;
+  height: 30px;
+  border-bottom: 1px solid lightgrey;
+}
+#about-article p, #about-article h4, #about-article li {
+  font-family: Arial;
+  font-size: 13.3333px;
 }
 
 #notice_div p {
- padding: 5px;
+  padding: 5px;
   margin-top: 8px;
   margin-bottom: 8px;
   background: linear-gradient(#64B5F6, #000000);
@@ -484,16 +564,6 @@ article#about-article {
   padding-left: 20px;
   padding-right: 20px;
   color: white; 
-}
-
-#left-side-bar-dark {
-  padding: 5px;
-  margin-top: 3px;
-  background: linear-gradient(#64B5F6, #000000);
-  border:0;
-  padding-left: 20px;
-  padding-right: 20px;
-  color: white;
 }
 
 #side-left-panel {
@@ -511,6 +581,7 @@ table#side-left-panel {
 #side-bar-left ul li a {
   text-align: left;
   margin-left: 5px;
+  color: white;
 }
 
 #side-bar-left ul li:hover {
@@ -528,21 +599,28 @@ table#side-left-panel {
   border: 1px solid white;
   margin-bottom: 20px;
   border-radius: 4px;
+  margin: 0 auto; 
+  margin-left: 0; 
+  width: 100%; 
+  height: 320px; 
+  border-top-left-radius: 0; 
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0; 
+  border-bottom-right-radius: 0;
 }
 
-#profile-edit-div h2, #profile-changepassword-div h2 {
+#profile-changepassword-div h2 {
   border-bottom: 1px solid lightgrey;
-  height: 30px;
+  height: 50px;
   line-height: 30px;
   font-size: 14px;
   font-weight: 500;
-  color: #373e4a;
 }
 
 #myCarousel {
 }
 
-#profile-edit-div div, #profile-changepassword-div div {
+#profile-changepassword-div div {
   border-bottom: 1px solid lightgrey;
   margin-bottom: 25px;
 }
@@ -550,7 +628,8 @@ table#side-left-panel {
 #profile-edit-div2 div {
   border-bottom: 1px solid white;
   margin-bottom: 25px;
-  height: 30px;
+  height: 40px;
+  text-align: right;
 }
 
 #profile-edit-div2 p label {
@@ -573,12 +652,22 @@ table#side-left-panel {
   border: 1px solid lightgrey;
 }
 
-#profile-edit-div input[type="button"], #profile-changepassword-div input[type="button"] {
+#profile-edit-div input[type="button"], #profile-changepassword-div input[type="button"], #customerdata-td input[type="button"],
+#tbl-content input[type="button"], #truckmanagement-td input[type="button"], #reporting input[type="button"] {
   width: 200px;
   text-align: center;
+  display: inline; 
+  vertical-align: top; 
+  line-height: 30px; 
+  margin-top: 5px; 
+  background: limegreen; 
+  border:none; 
+  border-radius: 5px; 
+  font-size: 13.333px; 
+  color: white;
 }
 
-#profile-edit-div div input, #profile-edit-div div textarea, #profile-changepassword-div div input {
+#profile-edit-div div , #profile-edit-div div textarea, #profile-changepassword-div div input {
   text-align: justify;
   border-radius: 2px;
   border: 1px solid lightgrey;
@@ -600,18 +689,18 @@ table#side-left-panel {
 #noticeboard_content p label {
   display: block;
   padding: 5px;
+  padding-left: 0px;
+  margin-top: 10px;
   margin-left: 0px;  
-  background: blue; 
-  padding-left: 20px; 
+  background: white;  
   padding-right: 5px; 
-  color: white;
+  color: grey;
   width: 45%;
   text-align: justify;
-  border-radius: 2px;
 }
 
 /**************************style2**************************/
-#customerdata-td h1, #truckdata_td h1, #driverdata_td h1, #truckmanagement-td h1, #profile-td h1, #deliverymanagement-td h1 {
+#customerdata-td h1, #truckdata_td h1, #driverdata_td h1, #truckmanagement-td h1, #profile-td h1, #deliverymanagement-td h1, #scheduledata_td h1, #reporting h1 {
   font-size: 30px;
   color: black;
   text-transform: uppercase;
@@ -621,7 +710,7 @@ table#side-left-panel {
   border-bottom: 1px solid rgba(69, 74, 84, 0.7);
 }
 
-#customerdata-td h2, #truckdata_td h2, #driverdata_td h2, #truckmanagement-td h2, #profile-td h2, #deliverymanagement-td h2 {
+#customerdata-td h2, #truckdata_td h2, #driverdata_td h2, #truckmanagement-td h2, #profile-td h2, #deliverymanagement-td h2, #scheduledata_td h2, #reporting h2 {
   font-size: 20px;
   color: black;
   text-transform: uppercase;
@@ -630,7 +719,7 @@ table#side-left-panel {
   margin-bottom: 15px;
   border-bottom: 1px solid white;
 }
-#tbl-header table, #tbl-content table, #truckdata_td table, #driverdata_td table, #truckmanagement-td table, #deliverymanagement-td table {
+#tbl-header table, #tbl-content table, #truckdata_td table, #driverdata_td table, #truckmanagement-td table, #deliverymanagement-td table, #scheduledata_td table {
   width:100%;
   table-layout: fixed;
 }
@@ -639,7 +728,8 @@ table#side-left-panel {
  }
 #tbl-content{
   height:420px;
-  overflow-x:auto;
+  overflow-x:none;
+  overflow-y: scroll;
   margin-top: 0px;
   margin-right: 1px;
   border: 1px solid rgba(255,255,255,0.3);
@@ -650,6 +740,9 @@ table#side-left-panel {
   font-weight: 500;
   font-size: 12px;
   color: #fff;
+  text-transform: uppercase;
+}
+#tbl-customer table thead tr th{
   text-transform: uppercase;
 }
 #tbl-content table tbody tr td{

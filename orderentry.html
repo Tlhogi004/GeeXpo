@@ -5,6 +5,7 @@
   <title>Order Entry | BriteHouse</title>
   	<link href="bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+   	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
    	<link rel="stylesheet" href="css/style.css">
 
   	<div id="top-div" style="color: black; height: 40px; width: 100px; font-size: 13.3333px;">
@@ -15,7 +16,6 @@
 			<input type="text" placeholder="SEARCH" style="border-radius: 10px;">
 		</div>
 
-		<div id="green-bar"></div>
 		<div id="exception" style="display: none;">
 			<div id="message" style="background-color: red; width: 200px; text-align: center; margin-left: 65.5%;">
 				<label style="color: black;">Invalid login</label>
@@ -24,45 +24,35 @@
 				<label style="color: black;">Please enter correct email and password!</label>
 			</div>
 		</div>
-		<div id="log-bar" style="margin-left: 59%; color: black; height: 30px; width: 100px; font-size: 13.3333px;">
+		<div id="image-src" style="position: relative; display: block;">
+			<img src="Images/britehouse_icon.png" alt="britehouse_icon">
+		</div>
+		<div id="body-nav" style="height: 80px;">
+		<ul>
+			<li><a href="index.php">HOME</a></li>
+			<li><a href="about.html">ABOUT</a></li>
+			<li><a href="#">FORUMS</a></li>
+			<li><a href="contactus.html">CONTACT US</a></li>
+		</ul>
+		<div id="log-bar" style="margin-left: 56%; color: black; vertical-align: top; width: 100px; font-size: 13.3333px;">
 			<form onsubmit="return validatePasswords(this);" action="login.php" method="post">
 				<table>
-					<tbody>
-						<tr>
-							<td>Username:</td><td><input type="text" name="txtusername" id="txtusername"></td>
-							<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword"></td>
-							<td><input type="submit" value="LOGIN" onclick="login()" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 3px;"></td>
-							<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px;"></td>
-						</tr>
-					</tbody>
-				</table>
+				<tbody>
+					<tr>
+						<td>Username:</td><td><input type="text" name="txtusername" id="txtusername" style="margin-left: 3px; margin-right: 3px;"></td>
+						<td>Password:</td><td><input type="password" name="txtpassword" id="txtpassword" style="margin-left: 3px;"></td>
+						<td><input type="submit" value="LOGIN" style="margin: 3px;width: 100px;"></td>
+						<td><input type="button" value="?" style="background-color: darkblue; color: white; border-color: darkblue; border-radius: 50px; margin-left: 3px;"></td>
+					</tr>
+				</tbody>
+			</table>
 			</form>
 		</div>
-
-		<div id="image-src">
-			<img src="Images/britehouse_icon.png" alt="britehouse_icon">
 		</div>
 </header>
 	
 <body>
 	<div id="lightblue-bar"></div>
-
-	<div id="body-nav" style="margin-top: 0;">
-		<ul>
-			<li><a href="index.html">HOME</a></li>
-			<li><a href="about.html">ABOUT</a></li>
-			<li><a href="#">ORDER CENTER</a>
-				<ul>
-					<li><a href="#">ORDER ENTRY</a></li>
-					<li><a href="orderstatushistory.php">ORDER STATUS AND HISTORY</a></li>
-					<li><a href="productsearch.html">PRODUCT SEARCH</a></li>
-				</ul>
-			</li>
-			<li><a href="#">FORUMS</a></li>
-			<li><a href="#">CONTACT US</a></li>
-		</ul>
-	</div>
-
 	<div id="body-middle-div">
 		<form action="insertorder.php" method="get" id="order_entry_form">
 		  	<h2>ORDER ENTRY</h2>
@@ -90,7 +80,7 @@
 					<tr>
 						<td style="width: 370px;"><p><label for="firstname" class="floatLabel">FIRST NAME</label><input id="firstname" name="firstname" type="text"></p></td>
 						<td><p><label for="surname" class="floatLabel">LAST NAME</label><input id="surname" name="surname" type="text"></p></td>				
-						<td><p><label for="phoneno" class="floatLabel">PHONE NO</label><input id="phoneno" name="phoneno" type="text"></p></td>
+						<td style="width: 200px;"><p><label for="phoneno" class="floatLabel">PHONE NO</label><input id="phoneno" name="phoneno" type="text"></p></td>
 					</tr>
 
 					<tr>

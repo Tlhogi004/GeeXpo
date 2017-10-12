@@ -1,77 +1,32 @@
 <?php
 	require_once __DIR__ . '/db_config.php';
 	include("phpsessionattr.php");
-	//Connect to our MySQL database using the PDO extension.
-	$pdo = new PDO('mysql:host=localhost;dbname=britehousedeliverymanagement', 'root', 'tl004');
-	 
-
-	/*======================RETRIEVE ALL CUSTOMERS=====================*/
-	$retrieveCustomers = "CALL select_all_customers()";
-	$stmt = $pdo->prepare($retrieveCustomers);
-	$stmt->execute();
-	$customerinfo = $stmt->fetchAll();
-	/*=================================================================*/
-
-	/*======================RETRIEVE ALL VEHICLES======================*/
-	$retrieveVehicles = "CALL select_all_vehicles()";
-	$stmt = $pdo->prepare($retrieveVehicles);
-	$stmt->execute();
-	$vehicleinfo = $stmt->fetchAll();
-	/*=================================================================*/
-
-	/*======================RETRIEVE COUNT VEHICLES======================*/
-	$retrieveVehiclesCount = "CALL select_count_vehicles()";
-	$stmt = $pdo->prepare($retrieveVehiclesCount);
-	$stmt->execute();
-	$vehiclecountinfo = $stmt->fetchAll();
-	/*=================================================================*/
-
-	/*======================RETRIEVE ALL DRIVERS=======================*/
-	$retrieveDrivers = "CALL select_all_drivers()";
-	$stmt = $pdo->prepare($retrieveDrivers);
-	$stmt->execute();
-	$driverinfo = $stmt->fetchAll();
-	/*=================================================================*/
-
-	/*======================RETRIEVE COUNT DRIVERS=======================*/
-	$retrieveDriversCount = "CALL select_count_drivers()";
-	$stmt = $pdo->prepare($retrieveDriversCount);
-	$stmt->execute();
-	$drivercountinfo = $stmt->fetchAll();
-	/*=================================================================*/	
-
-	/*=================RETRIEVE ALL PENDING DELIVERIES=================*/
-	$retrievePendingDeliveries = "CALL select_all_pending_deliveries()";
-	$stmt = $pdo->prepare($retrievePendingDeliveries);
-	$stmt->execute();
-	$pendingdeliveryinfo = $stmt->fetchAll();
-	/*=================================================================*/
-
-	/*=====================RETRIEVE ALL SCHEDULES======================*/
-	$retrieveSchedules = "CALL select_all_schedules()";
-	$stmt = $pdo->prepare($retrieveSchedules);
-	$stmt->execute();
-	$scheduleinfo = $stmt->fetchAll();
-	/*=================================================================*/
-
-	/*===================RETRIEVE ALL NOTICE COMENTS===================*/
-	$retrieveNoticeComments = "CALL select_all_notice_comments()";
-	$stmt = $pdo->prepare($retrieveNoticeComments);
-	$stmt->execute();
-	$noticeinfo = $stmt->fetchAll();
-	/*=================================================================*/
-
-	/*====================RETRIEVE ALL SHIFT SLOTS=====================*/
-	$retrieveShiftSlots = "CALL select_all_shift_slots()";
-	$stmt = $pdo->prepare($retrieveShiftSlots);
-	$stmt->execute();
-	$shiftslotsinfo = $stmt->fetchAll();
-	/*=================================================================*/
-
-	$query4 = "CALL select_delivery()";
-	$query10 = "CALL auto_update_deliveries()";
 	
+	date_default_timezone_set('Africa/Harare');
+	$date = date('m/d/Y h:i:s', time());
+
+	$query1 = "SELECT * FROM britehousedeliverymanagement.VEHICLE";
+	$query2 = "SELECT CUSTOMER.CUST_FNAME, CUSTOMER.CUST_LNAME, CUSTOMER.CUST_PHONE, CUSTOMER.CUST_EMAIL, CUSTOMER.CUST_ADDRESS FROM britehousedeliverymanagement.CUSTOMER ORDER BY CUSTOMER.CUST_FNAME";
+	$query3 = "SELECT * FROM britehousedeliverymanagement.DRIVER";
+	$query4 = "CALL select_delivery()";
+	$query6 = "SELECT COUNT(*) FROM britehousedeliverymanagement.DRIVER";
+	$query7 = "SELECT COUNT(*),VEHICLE.VEH_CODE FROM britehousedeliverymanagement.VEHICLE";
+	$query8 = "SELECT COUNT(*) FROM britehousedeliverymanagement.PRODUCT WHERE PRODUCT.PROD_EXP_DATE >= '$date'";
+	$query9 = "SELECT * FROM britehousedeliverymanagement.SCHEDULE";
+	$query10 = "CALL auto_update_deliveries()";
+	$query11 = "SELECT NOTICE.TITLE,NOTICE.DESCRIPTION,NOTICE.STARTDATE,NOTICE.ENDDATE FROM britehousedeliverymanagement.NOTICE";
+	
+	$result7 = mysqli_query($conn, $query6);
+	$result8 = mysqli_query($conn, $query7);
+	$result9 = mysqli_query($conn, $query8);
+	$result10 = mysqli_query($conn, $query9);
 	$result11 = mysqli_query($conn, $query10);
+	$result12 = mysqli_query($conn, $query11);
+	$result13 = mysqli_query($conn, $query2);
+	$result1 = mysqli_query($conn, $query1);
+	$result2 = mysqli_query($conn, $query2);
+	$result3 = mysqli_query($conn, $query3);
+	$result4 = mysqli_query($conn, $query1);
 	$result5 = mysqli_query($conn, $query4);
 
 	$numOfDriver = 0;
@@ -83,28 +38,24 @@
 	$arrstartdate[] = array();
 	$arrenddate[] = array();
 
-	foreach($noticeinfo as $info) {
-		$arrtitle[] = array(0 => $info['TITLE']);
-		$arrdescription[] = array(0 => $info['DESCRIPTION']);
-		$arrstartdate[] = array(0 => $info['STARTDATE']);
-		$arrenddate[] = array(0 => $info['ENDDATE']);
-	}
+	while($row1 = mysqli_fetch_array($result12)):;
+		$arrtitle[] = array(0 => $row1[0]);
+		$arrdescription[] = array(0 => $row1[1]);
+		$arrstartdate[] = array(0 => $row1[2]);
+		$arrenddate[] = array(0 => $row1[3]);
+	endwhile;
 	      
-	foreach($drivercountinfo as $info) {
-		$numOfDriver = $info['NUM_OF_DRIVERS'];
-	}
+	if($row1 = mysqli_fetch_array($result7)):;
+		$numOfDriver = $row1[0];
+	endif;
 
-	foreach($vehiclecountinfo as $info) {
-		$numOfVehicle = $info['NUM_OF_VEHICLES'];
-	}
+	if($row1 = mysqli_fetch_array($result8)):;
+		$numOfVehicle = $row1[0];
+	endif;
 
-	foreach($pendingdeliveryinfo as $info) {
-		if(isset($info['PENDING_DELIVERIES'])) {
-			$numOfDelivery = $info['PENDING_DELIVERIES'];
-		}else {
-			$numOfDelivery = 0;
-		}
-	}
+	if($row1 = mysqli_fetch_array($result9)):;
+		$numOfDelivery = $row1[0];
+	endif;
 
 	session_start();
 
@@ -139,14 +90,12 @@
   	<script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
   	<link rel="stylesheet" href="css/displaystyle.css">
     <link rel="stylesheet" href="css/calendar_style.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/r/bs-3.3.5/jq-2.1.4,dt-1.10.8/datatables.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 
     <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
-  	
   	<header>
 		<div id="top-div" style="color: black; height: 40px; width: 100px; font-size: 13.3333px; margin-left: 75.1%;">
-			<input type="submit" value="Admin Panel" id="inserttransport" style="background: linear-gradient(#64B5F6, #1A237E); border-width: 0px; color: white;">
+			<input type="submit" value="Driver Panel" id="inserttransport" style="background: linear-gradient(#64B5F6, #1A237E); border-width: 0px; color: white;">
 			<select id="mylist" onchange="favlang()">
 				<option>English</option>
 			</select>
@@ -174,20 +123,20 @@
 	var arrstartdate = <?php echo json_encode($arrstartdate); ?>;
 	var arrenddate = <?php echo json_encode($arrenddate); ?>;
  </script>
-<body>
+<body onbeforeunload=”HandleBackFunctionality()”>
 	<div class="p_body js__p_body js__fadeout"></div>
 	
 	<div id="delivery-edit-div" class="popup js__popup js__slide_top" style="margin-bottom: 0px; background-color: lightblue; display: none;">
 		<form action="updatevehicles.php" method="post">
 			<h2 style="margin-bottom: 25px; margin-top: 13px; position: absolute; font-size: 16px;">BRITEHOUSE DELIVERY MANAGEMENT SYSTEM</h2>
 			<a href="#" class="p_close js__p_close" title="Close"></a>
-		    <div class="p_content" style="background-color: lightblue; height: 650px;">
+		    <div class="p_content" style="background-color: lightblue; height: 500px;">
 		    	<h2 style="margin-bottom: 25px; margin-top: 0px; text-align: left; border-bottom: 1px solid white;">EDIT VEHICLE</h2>
 				<table style="margin: 0 auto; width: 90%;">
 		    		<tbody>
 		    			<tr>
 		    				<td style="width: 50%;">
-		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 450px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 400px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
 									<div><p><label for="transportreg" class="floatLabel">VEHICLE REG.</label></p></div>
 									<div><p><label for="transportype" class="floatLabel">VEHICLE TYPE</label></p></div>
 									<div><p><label for="loadlimit" class="floatLabel">LOAD CAPABILITY</label></p></div>
@@ -197,33 +146,39 @@
 								</div>
 		    				</td>
 		    				<td style="width: 50%; margin-left: 0;">
-		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 450px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 400px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
 									<div><p><input type="text" id="transportreg" name="transportreg" style="height: 25px;"></p></div>
 									<div><p><input type="text" id="transportype" name="transportype" style="height: 25px;"></p></div>
 									<div><p><input type="text" id="loadlimit" name="loadlimit" style="height: 25px;"></p></div>
 									<div><p><input type="text" id="transportcost" name="transportcost" style="height: 25px;"></p></div>
 									<div><p><input type="text" id="depotrange" name="depotrange" style="height: 25px;"></p></div>
 									<div><p>
-											<select id="schedule_drop" name="schedule_drop" onchange="favlang()" style="height: 25px; width: 200px; font-size: 13.3333px;">
-											    <?php foreach($scheduleinfo as $info): ?>
-											        <option value="<?= $info['SCH_CODE']; ?>"><?= $info['SCH_CODE']; ?></option>
+										<?php
+											//Connect to our MySQL database using the PDO extension.
+											$pdo = new PDO('mysql:host=localhost;dbname=britehousedeliverymanagement', 'root', 'tl004');
+											 
+											//Our select statement. This will retrieve the data that we want.
+											$sql = "SELECT SCH_CODE FROM SCHEDULE";
+											 
+											//Prepare the select statement.
+											$stmt = $pdo->prepare($sql);
+											 
+											//Execute the statement.
+											$stmt->execute();
+											 
+											//Retrieve the rows using fetchAll.
+											$schedulecode1 = $stmt->fetchAll();
+											 
+											?>
+											 
+											<select id="schedule_drop" name="schedule_drop" onchange="favlang()" style="height: 25px; width: 185px;">
+											    <?php foreach($schedulecode1 as $sch_code): ?>
+											        <option value="<?= $sch_code['SCH_CODE']; ?>"><?= $sch_code['SCH_CODE']; ?></option>
 											    <?php endforeach; ?>
 											</select>
 										</p>
 									</div>
-									<p><input id="vehicle_button" type="submit" name="" value="ADD VEHICLE" 
-										style="
-												width: 200px;
-											  	text-align: center;
-											  	display: block; 
-											  	line-height: 30px; 
-											  	background: limegreen; 
-											  	border:none; 
-											  	font-size: 13.333px;
-											  	font-weight: 700; 
-											  	color: white;
-											  ">
-									</p>
+									<p><input id="vehicle_button" type="submit" name="" value="ADD" style="width: 100px; border-radius: 2px; background-color: #00a651; border: none; -webkit-appearance: button; cursor: pointer; color: white; margin-bottom: 10px; text-align: center; height: 30px;"></p>
 								</div>
 		    				</td>
 		    			</tr>
@@ -236,13 +191,13 @@
 		<form action="insertschedule.php" method="get">
 			<h2 style="margin-bottom: 25px; margin-top: 13px; position: absolute; font-size: 16px;">BRITEHOUSE DELIVERY MANAGEMENT SYSTEM</h2>
 			<a href="#" class="p_close js__p_close" title="Close"></a>
-		    <div class="p_content" style="background-color: lightblue; height: 650px;">
+		    <div class="p_content" style="background-color: lightblue; height: 600px;">
 		    	<h2 style="margin-bottom: 25px; margin-top: 0px; text-align: left; border-bottom: 1px solid white;">ADD SCHEDULE</h2>
 				<table style="margin: 0 auto; width: 90%;">
 		    		<tbody>
 		    			<tr>
 		    				<td style="width: 50%;">
-		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 450px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
+		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 400px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
 									<div><p><label for="schedulecode" class="floatLabel">SCHEDULE CODE</label></p></div>
 									<div><p><label for="startdate" class="floatLabel">START DATE</label></p></div>
 									<div><p><label for="enddate" class="floatLabel">END DATE</label></p></div>
@@ -252,104 +207,14 @@
 								</div>
 		    				</td>
 		    				<td style="width: 50%; margin-left: 0;">
-		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 450px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
+		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 400px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
 									<div><p><input type="text" id="schedulecode" name="schedulecode" style="height: 25px;"></p></div>
 									<div><p><input type="text" id="startdate" name="startdate" style="height: 25px;"></p></div>
 									<div><p><input type="text" id="enddate" name="enddate" style="height: 25px;"></p></div>
 									<div><p><input type="text" id="starttime" name="starttime" style="height: 25px;"></p></div>
 									<div><p><input type="text" id="endtime" name="endtime" style="height: 25px;"></p></div>
 									<div><p><input type="text" id="plannerid" name="plannerid" style="height: 25px;"></p></div>
-									<p><input id="vehicle_button" type="submit" name="" value="ADD SCHEDULE" 
-										style="
-												width: 200px;
-											  	text-align: center;
-											  	display: block; 
-											  	line-height: 30px; 
-											  	background: limegreen; 
-											  	border:none; 
-											  	font-size: 13.333px;
-											  	font-weight: 700; 
-											  	color: white;
-											  ">
-									</p>
-								</div>
-		    				</td>
-		    			</tr>
-		    		</tbody>
-		    	</table>
-		    </div>
-	    </form>
-	</div>
-	<div id="driver-edit-div" class="popup js__popup js__slide_top" style="margin-bottom: 0px; background-color: lightblue; display: none;">
-		<form action="insertdriver.php" method="get">
-			<h2 style="margin-bottom: 25px; margin-top: 13px; position: absolute; font-size: 16px;">BRITEHOUSE DELIVERY MANAGEMENT SYSTEM</h2>
-			<a href="#" class="p_close js__p_close" title="Close"></a>
-		    <div class="p_content" style="background-color: lightblue; height: 700px;">
-		    	<h2 style="margin-bottom: 25px; margin-top: 0px; text-align: left; border-bottom: 1px solid white;">ADD DRIVER</h2>
-				<table style="margin: 0 auto; width: 90%;">
-		    		<tbody>
-		    			<tr>
-		    				<td style="width: 50%;">
-		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 500px; border-right: none; border-top-right-radius: 0; border-bottom-right-radius: 0;">
-									<div><p><label for="drivercode" class="floatLabel">DRIVER CODE</label></p></div>
-									<div><p><label for="driverfirstname" class="floatLabel">FIRST NAME</label></p></div>
-									<div><p><label for="driverlastname" class="floatLabel">LAST NAME</label></p></div>
-									<div><p><label for="driverphonenumber" class="floatLabel">PHONE NUMBER</label></p></div>
-									<div><p><label for="driverlicense" class="floatLabel">DRIVER'S LICENSE</label></p></div>
-									<div style="height: 50px;"><p style="margin-top: -10px;"><label for="driverlicense" class="floatLabel">SHIFT</label></p></div>
-									<div><p><label for="assignedtruck" class="floatLabel">ASSIGNED TRUCK</label></p></div>
-								</div>
-		    				</td>
-		    				<td style="width: 50%; margin-left: 0;">
-		    					<div id="profile-edit-div2" style="margin: 0 auto; margin-left: 0; width: 100%; height: 500px; border-left: none; border-top-left-radius: 0; border-bottom-left-radius: 0;">
-									<div><p><input type="text" id="drivercode" name="drivercode" style="height: 25px;"></p></div>
-									<div><p><input type="text" id="driverfirstname" name="driverfirstname" style="height: 25px;"></p></div>
-									<div><p><input type="text" id="driverlastname" name="driverlastname" style="height: 25px;"></p></div>
-									<div><p><input type="text" id="driverphonenumber" name="driverphonenumber" style="height: 25px;"></p></div>
-									<div><p><input type="text" id="driverlicense" name="driverlicense" style="height: 25px;"></p></div>
-									<div><p>
-											<select id="assignedshiftday" name="assignedshiftday" 
-													style="float:left;height: 25px; margin-left: 15px; border:none; text-align: left; width: 25%; font-size: 13.3333px;">
-											    <option value="MON">MON</option>
-											    <option value="TUE">TUE</option>
-											    <option value="WED">WED</option>
-											    <option value="THU">THU</option>
-											    <option value="FRI">FRI</option>
-											    <option value="SAT">SAT</option>
-											</select>
-											<select id="assignedshiftslot" name="assignedshiftslot" 
-													style="float:right;height: 25px; margin-left: 5px; border:none; text-align: left; width: 60%; font-size: 13.3333px;">
-											    <?php foreach($shiftslotsinfo as $info): ?>
-											        <option value="<?= $info['SFT_CLOCKIN'];?>-<?= $info['SFT_CLOCKOUT'];?>">
-											        	<?= $info['SFT_CLOCKIN']; ?>-<?= $info['SFT_CLOCKOUT'];?>
-											        </option>
-											    <?php endforeach; ?>
-											</select>
-										</p>
-									</div>
-									<div><p>
-											<select id="assignedtruck" name="assignedtruck" 
-													style="height: 25px; margin-left: 15px; border:none; text-align: left; width: 200px; font-size: 13.3333px;">
-											    <option>SELECT</option>
-											    <?php foreach($vehicleinfo as $info): ?>
-											        <option value="<?= $info['VEH_CODE']; ?>"><?= $info['VEH_CODE']; ?></option>
-											    <?php endforeach; ?>
-											</select>
-										</p>
-									</div>
-									<p><input id="driver_button" type="submit" name="" value="ADD DRIVER" 
-										style="
-												width: 200px;
-											  	text-align: center;
-											  	display: block; 
-											  	line-height: 30px; 
-											  	background: limegreen; 
-											  	border:none; 
-											  	font-size: 13.333px;
-											  	font-weight: 700; 
-											  	color: white;
-											  ">
-									</p>
+									<p><input id="vehicle_button" type="submit" name="" value="ADD SCHEDULE" style="width: 115px; border-radius: 2px;background-color: #00a651; border: none; -webkit-appearance: button; cursor: pointer; color: white; margin-bottom: 10px; text-align: center; height: 30px;"></p>
 								</div>
 		    				</td>
 		    			</tr>
@@ -377,14 +242,7 @@
 											<li onclick="schedulemanagement_display();"><a href="#" onclick="schedulemanagement_display();">SCHEDULE MANGEMENT</a></li>
 											<li onclick="drivermanagement_display();"><a href="#" onclick="drivermanagement_display();">DRIVER MANGEMENT</a></li>
 											<li onclick="truckmanagement_display();"><a href="#" onclick="truckmanagement_display();">TRUCK MANGEMENT</a></li>
-											<li><a href="#">REPORTING</a>
-												<ul>
-													<li onclick="customer_report();"><a href="" onclick="customer_report();">CUSTOMER REPORT</a></li>
-													<li><a href="">DELIVERY REPORT</a></li>
-													<li><a href="">DRIVER REPORT</a></li>
-													<li><a href="">VEHICLE REPORT</a></li>
-												</ul>
-											</li>
+											<li onclick="reportmanagement_display();"><a href="#" onclick="reportmanagement_display();">REPORTING</a></li>
 											<li onclick="profilemanagement_display();"><a href="#" onclick="profilemanagement_display();">PROFILE</a></li>
 											<li onclick="profilemanagement_display();"><a href="#" onclick="profilemanagement_display();">HELP</a></li>
 											<li style="border-bottom: 1px solid rgba(69, 74, 84, 0.7);" onclick="location.href='sessionlogout.php';"><a href="sessionlogout.php">LOGOUT</a></li>
@@ -397,20 +255,7 @@
 					<td id="scheduledata_td" style="display: none; width: 100%; margin-top: 10.8px; vertical-align: top; margin-right: 5px;">
 						<h1>Britehouse Delivery Management System</h1>
 						<img src="images/right arrow.png" style="width: 30px;"><h2 style="display: inline; vertical-align: top; line-height: 34px; margin-left: 10px;">SCHEDULE INFORMATION</h2>
-						<input class="js__p_start"; type="button" id="addschedule" onclick="document.getElementById('schedule_button').value = 'ADD SCHEDULE'" name="addschedule" value="ADD SCHEDULE" 
-						style="margin-left: 81%;
-								margin-top: -35px;
-								margin-bottom: 10px;
-								width: 200px;
-							  	text-align: center;
-							  	display: block; 
-							  	line-height: 30px; 
-							  	background: limegreen; 
-							  	border:none; 
-							  	font-size: 13.333px;
-							  	font-weight: 700; 
-							  	color: white;
-							  ">
+						<input class="js__p_start"; type="button" id="addcustomer" onclick="document.getElementById('vehicle_button').value = 'PROCEED'" name="addcustomer" value="ADD SCHEDULE" style="background-color: #00a651; color: white; border: none; border-radius: 2px; margin-bottom: 10px;text-align: right; margin-left: 91%; margin-right: 0; cursor: pointer; height: 30px;">
 						<section style="background: -webkit-linear-gradient(left, #25c481, #25b7c4);background: linear-gradient(to right, #25c481, #25b7c4);">
 						  	<div id="tbl-header">
 								<table cellpadding="0" cellspacing="0" border="0">
@@ -429,85 +274,94 @@
 						  	<div id="tbl-content" style="height: 405px;">
 						    	<table cellpadding="0" cellspacing="0" border="0">
 							      	<tbody>
-							        	<?php foreach($scheduleinfo as $info): ?>
+							        	<?php while($row1 = mysqli_fetch_array($result10)):;?>
 											<tr>
-												<td><?= $info['SCH_CODE'];?></td>
-												<td><?= $info['SCH_SDATE'];?></td>
-												<td><?= $info['SCH_STIME'];?></td>
-												<td><?= $info['SCH_EDATE'];?></td>
-												<td><?= $info['SCH_STIME'];?></td>
-												<td style="width: 175px;"><?= $info['DEL_PLN_ID'];?></td>
+												<td><?php echo $row1[0];?></td>
+												<td><?php echo $row1[1];?></td>
+												<td><?php echo $row1[2];?></td>
+												<td><?php echo $row1[3];?></td>
+												<td><?php echo $row1[4];?></td>
+												<td style="width: 175px;"><?php echo $row1[5];?></td>
 											</tr>
-										<?php endforeach?>
+										<?php endwhile;?>
 							      	</tbody>
 						    	</table>
 						  </div>
 						</section>
 					</td>
-					<td id="reporting" style="display: none; width: 99.5%; margin-top: 10.8px; vertical-align: top; margin-right: 5px;">
+					<td id="reporting" style="display: none; width: 100%; margin-top: 10.8px; vertical-align: top; margin-right: 5px;">
             			<h1>Britehouse Delivery Management System</h1>
 						<img src="images/right arrow.png" style="width: 30px;"><h2 style="display: inline; vertical-align: top; line-height: 34px; margin-left: 10px;">CUSTOMER INFORMATION</h2>
-						<div class="container" style="border: 1px solid lightgrey;">
-							
-							<span class="btn-group" style="margin-top: 5px; width: 200px; margin-left: 85.2%; margin-bottom: 10px;">
-	              				<button class="js-cal-prev1 btn btn-default">Excel</button>
-	              				<button id="export_pdf" class="js-cal-prev2 btn btn-default">PDF</button>
-	              				<button class="js-cal-prev3 btn btn-default">Print</button>
-            				</span>
-            				
-							<table id="tbl-customer" class="display" cellspacing="0" width="100%">
-							    <thead style="border-bottom: 1px solid lightgrey; border-top: 1px solid lightgrey;">
-							        <tr style="height: 30px;">
-							            <th style="color: grey; font-size: 13.3333px; font-family: Arial; font-weight: bold;">FIRST_NAME</th>
-							            <th style="color: grey; font-size: 13.3333px; font-family: Arial; font-weight: bold;">LAST_NAME</th>
-							            <th style="color: grey; font-size: 13.3333px; font-family: Arial; font-weight: bold;">CONTACTS</th>
-							            <th style="color: grey; font-size: 13.3333px; font-family: Arial; font-weight: bold;">EMAIL</th>
-							            <th style="color: grey; font-size: 13.3333px; font-family: Arial; font-weight: bold;">ADDRESS</th>
-							        </tr>
-							    </thead>
-							    <tbody>
-						    	<?php
-									 
-								?>
-							    <?php foreach($customerinfo as $info): ?>
-							        <tr style="border-bottom: 1px solid lightgrey; height: 50px;">
-							            <td style="text-transform:uppercase; font-size: 13.3333px; font-family: Arial;"><?= $info['CUST_FNAME']; ?></td>
-							            <td style="text-transform:uppercase; font-size: 13.3333px; font-family: Arial;"><?= $info['CUST_LNAME']; ?></td>
-							            <td style="text-transform:uppercase; font-size: 13.3333px; font-family: Arial;"><?= $info['CUST_PHONE']; ?></td>
-							            <td style="text-transform:uppercase; font-size: 13.3333px; font-family: Arial;"><?= $info['CUST_EMAIL']; ?></td>
-							            <td style="text-transform:uppercase; font-size: 13.3333px; font-family: Arial;"><?= $info['CUST_ADDRESS']; ?></td>
-							        </tr>
-							    <?php endforeach;?>
-							    </tbody>
-							</table>
-        				</div>
-
-						<script type="text/javascript">
-						    // For demo to fit into DataTables site builder...
-						    $('#tbl-customer')
-						        .removeClass( 'display' )
-						        .addClass('table table-striped table-bordered');
-						</script>
+						<span class="btn-group" style="float: right;">
+              				<button class="js-cal-prev1 btn btn-default">Excel</button>
+              				<button id="export_pdf" class="js-cal-prev2 btn btn-default">PDF</button>
+              				<button class="js-cal-prev3 btn btn-default">Print</button>
+              				<label style="font-family: Arial;font-size: 13.3333px;font-weight: 0;">SEARCH: </label>
+              				<input type="text" name="" style="font-family: Arial;height: 35px; border-radius: 2px; border: 1px solid lightgrey; margin-right: 5px;">
+            			</span>
+						<section style="background: -webkit-linear-gradient(left, #25c481, #25b7c4);background: linear-gradient(to right, #25c481, #25b7c4); margin-top: 10px;">
+							<div id="tbl-content">
+								<table id="tbl-customer" cellpadding="0" cellspacing="0" border="0">
+									<thead style="background-color: rgba(255,255,255,0.3);">
+										<tr>
+											<th style="padding: 5px;
+													  text-align: left;
+													  font-weight: 500;
+													  font-size: 12px;
+													  color: #fff;
+													  text-transform: uppercase;">FIRST_NAME</th>
+											<th style="padding: 5px;
+													  text-align: left;
+													  font-weight: 500;
+													  font-size: 12px;
+													  color: #fff;
+													  text-transform: uppercase;">LAST_NAME</th>
+											<th style="padding: 5px;
+													  text-align: left;
+													  font-weight: 500;
+													  font-size: 12px;
+													  color: #fff;
+													  text-transform: uppercase;">CONTACTS</th>
+											<th style="padding: 5px;
+													  text-align: left;
+													  font-weight: 500;
+													  font-size: 12px;
+													  color: #fff;
+													  text-transform: uppercase;">EMAIL</th>
+											<th style="padding: 5px;
+													  text-align: left;
+													  font-weight: 500;
+													  font-size: 12px;
+													  color: #fff;
+													  text-transform: uppercase;">ADDRESS</th>
+											<th></th>	
+										</tr>
+									</thead>
+									
+						      		<tbody>
+						      		<input type="hidden" id="customeremaildelete" name="customeremaildelete" value="">
+						        	<?php while($row1 = mysqli_fetch_array($result13)):;?>
+										<tr>
+											<td><?php echo $row1[0];?></td>
+											<td><?php echo $row1[1];?></td>
+											<td><?php echo $row1[2];?></td>
+											<td><?php echo $row1[3];?></td>
+											<td><?php echo $row1[4];?></td>
+											<td><input type="submit" value="DELETE" onclick="
+												document.getElementById('customeremaildelete').value = '<?php echo $row1[3];?>';
+												" 
+												style="width: 100px;">
+											</td>
+										</tr>
+									<?php endwhile;?>
+						      		</tbody>
+						    	</table>
+						    </div>
+						</section>
 					</td>
 					<td id="driverdata_td" style="display: none; width: 100%; margin-top: 10.8px; vertical-align: top; margin-right: 5px;">
 						<h1>Britehouse Delivery Management System</h1>
 						<img src="images/right arrow.png" style="width: 30px;"><h2 style="display: inline; vertical-align: top; line-height: 34px; margin-left: 10px;">DRIVER INFORMATION</h2>
-						<input class="js__p_start"; type="button" id="adddriver" onclick="document.getElementById('driver_button').value = 'CONTINUE'" name="adddriver" value="ADD DRIVER" 
-						style="margin-left: 81%;
-								margin-top: -35px;
-								margin-bottom: 10px;
-								width: 200px;
-							  	text-align: center;
-							  	display: block; 
-							  	line-height: 30px; 
-							  	background: limegreen; 
-							  	border:none; 
-							  	font-size: 13.333px;
-							  	font-weight: 700; 
-							  	color: white;
-								">
-
-
 						<section style="background: -webkit-linear-gradient(left, #25c481, #25b7c4);background: linear-gradient(to right, #25c481, #25b7c4);">
 						  	<div id="tbl-header">
 								<table cellpadding="0" cellspacing="0" border="0">
@@ -526,16 +380,16 @@
 						  	<div id="tbl-content" style="height: 405px;">
 						    	<table cellpadding="0" cellspacing="0" border="0">
 							      	<tbody>
-							        	<?php foreach($driverinfo as $info): ?>
+							        	<?php while($row1 = mysqli_fetch_array($result3)):;?>
 											<tr>
-												<td><?= $info['DRIV_ID'];?></td>
-												<td><?= $info['DRIV_FNAME'];?></td>
-												<td><?= $info['DRIV_LNAME'];?></td>
-												<td><?= $info['DRIV_PHONE'];?></td>
-												<td><?= $info['DRIV_LICENSE'];?></td>
-												<td style="width: 165px;"><?= $info['TRANS_CODE'];?></td>
+												<td><?php echo $row1[0];?></td>
+												<td><?php echo $row1[1];?></td>
+												<td><?php echo $row1[2];?></td>
+												<td><?php echo $row1[3];?></td>
+												<td><?php echo $row1[4];?></td>
+												<td style="width: 165px;"><?php echo $row1[5];?></td>
 											</tr>
-										<?php endforeach;?>
+										<?php endwhile;?>
 							      	</tbody>
 						    	</table>
 						  </div>
@@ -578,11 +432,29 @@
 										                <ul class="features">
 										                	<label id="vehiclestatus">STATUS: ACTIVE</label></br>
 										                    <label id="vehiclereg">
+										                    	<?php
+																//Connect to our MySQL database using the PDO extension.
+																$pdo = new PDO('mysql:host=localhost;dbname=britehousedeliverymanagement', 'root', 'tl004');
+																 
+																//Our select statement. This will retrieve the data that we want.
+																$sql = "SELECT VEH_CODE FROM VEHICLE ORDER BY VEH_CODE";
+																 
+																//Prepare the select statement.
+																$stmt = $pdo->prepare($sql);
+																 
+																//Execute the statement.
+																$stmt->execute();
+																 
+																//Retrieve the rows using fetchAll.
+																$vehiclecodes = $stmt->fetchAll();
+																 
+																?>
+																 
 																<select id="vehiclereg2" name="vehiclereg2" disabled 
 																		style="height: 25px; margin-left: 15px; background: #292b2e; border:none; text-align: center; width: 150px;">
 																    <option>SELECT</option>
-																    <?php foreach($vehicleinfo as $info): ?>
-																        <option value="<?= $info['VEH_CODE']; ?>"><?= $info['VEH_CODE']; ?></option>
+																    <?php foreach($vehiclecodes as $veh_code): ?>
+																        <option value="<?= $veh_code['VEH_CODE']; ?>"><?= $veh_code['VEH_CODE']; ?></option>
 																    <?php endforeach; ?>
 																</select>
 										                    </label></br>
@@ -592,7 +464,7 @@
 										                    <label>SCHEDULE: <a id="vehicleschedule" class="rad"></a></label>
 										                    <div class="box" id="box">This is a popup box</div>
 
-														  	<!-- <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script> -->
+														  	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 															<script  src="js/displayjquery.js"></script>
 										                </ul>
 										            </div>
@@ -744,14 +616,7 @@
 					<td id="truckmanagement-td" style="display: none; width: 100%; margin-top: 10.8px; vertical-align: top; margin-right: 5px;">
 						<h1>Britehouse Delivery Management System</h1>
 						<img src="images/right arrow.png" style="width: 30px;"><h2 style="display: inline; vertical-align: top; line-height: 34px; margin-left: 10px;">VEHICLE INFORMATION</h2>
-						<input class="js__p_start"; type="button" id="addcustomer" onclick="document.getElementById('vehicle_button').value = 'ADD VEHICLE'" name="addcustomer" value="ADD VEHICLE" style="margin-left: 81%; margin-left: 81%;
-								margin-top: -35px;
-								margin-bottom: 10px;
-							  	display: block;
-							  	font-size: 13.333px;
-							  	font-weight: 700;
-							  	border-radius: 0;
-							  	">
+						<input class="js__p_start"; type="button" id="addcustomer" onclick="document.getElementById('vehicle_button').value = 'ADD'" name="addcustomer" value="ADD VEHICLE" style="margin-left: 81%;">
 						<section style="background: -webkit-linear-gradient(left, #25c481, #25b7c4);background: linear-gradient(to right, #25c481, #25b7c4);">
 						  <!--for demo wrap-->
 						  <div id="tbl-header">
@@ -776,29 +641,29 @@
 						    	<table cellpadding="0" cellspacing="0" border="0">
 							      <tbody>
 							      	<input type="hidden" id="truckid" name="truckid">
-							        <?php foreach($vehicleinfo as $info): ?>
+							        <?php while($row1 = mysqli_fetch_array($result4)):;?>
 										<tr>
-											<td><?= $info['VEH_CODE']; ?></td>
-											<td><?= $info['VEH_TYPE']; ?></td>
-											<td><?= $info['VEH_LOAD_LMT']; ?></td>
-											<td><?= $info['VEH_COST']; ?></td>
-											<td><?= $info['VEH_DEPOTRANGE']; ?></td>
-											<td><?= $info['SCH_CODE']; ?></td>
+											<td><?php echo $row1[0];?></td>
+											<td><?php echo $row1[1];?></td>
+											<td><?php echo $row1[2];?></td>
+											<td><?php echo $row1[3];?></td>
+											<td><?php echo $row1[4];?></td>
+											<td><?php echo $row1[5];?></td>
 											<td style="text-align: left; width: 100px;">
 												<input type="submit" value="TRACK" 
-												onclick="document.getElementById('truckid').value = '<?= $info['VEH_CODE']; ?>';" 
+												onclick="document.getElementById('truckid').value = '<?php echo $row1[0];?>';" 
 												style="width: 100px;">
 											</td>
 											<td style="text-align: right;">
 											<input type="button" 
 												onclick="
-													document.getElementById('vehicle_button').value = 'UPDATE VEHICLE';
-													document.getElementById('transportreg').value = '<?= $info['VEH_CODE']; ?>';
-													document.getElementById('transportype').value = '<?= $info['VEH_TYPE']; ?>';
-													document.getElementById('loadlimit').value = '<?= $info['VEH_LOAD_LMT']; ?>';
-													document.getElementById('transportcost').value = '<?= $info['VEH_COST']; ?>';
-													document.getElementById('depotrange').value = '<?= $info['VEH_DEPOTRANGE']; ?>';
-													document.getElementById('schedule_drop').value = '<?= $info['SCH_CODE']; ?>';
+													document.getElementById('vehicle_button').value = 'UPDATE';
+													document.getElementById('transportreg').value = '<?php echo $row1[0];?>';
+													document.getElementById('transportype').value = '<?php echo $row1[1];?>';
+													document.getElementById('loadlimit').value = '<?php echo $row1[2];?>';
+													document.getElementById('transportcost').value = '<?php echo $row1[3];?>';
+													document.getElementById('depotrange').value = '<?php echo $row1[4];?>';
+													document.getElementById('schedule_drop').value = '<?php echo $row1[5];?>';
 													" 
 												class="js__p_start"; 
 												value="EDIT" style="width: 100px;"
@@ -806,7 +671,7 @@
 											</td>
 											<td style="text-align: right;"><input type="button" value="DELETE" style="width: 100px;"></td>
 										</tr>
-									<?php endforeach;?>
+									<?php endwhile;?>
 							      </tbody>
 							    </table>
 						    </form>
@@ -817,7 +682,7 @@
 						<h1>Britehouse Delivery Management System</h1>
 						<img src="images/right arrow.png" style="width: 30px;"><h2 style="display: inline; vertical-align: top; line-height: 34px; margin-left: 10px;">CUSTOMER INFORMATION</h2>
 						<form action="deletecustomer.php" method="get">
-							<section style="background: linear-gradient(to right, #25c481, #25b7c4);">
+							<section style="background: -webkit-linear-gradient(left, #25c481, #25b7c4);background: linear-gradient(to right, #25c481, #25b7c4);">
 							  	<div id="tbl-header">
 									<table cellpadding="0" cellspacing="0" border="0">
 										<thead>
@@ -836,27 +701,27 @@
 							    	<table cellpadding="0" cellspacing="0" border="0">
 							      		<tbody>
 							      		<input type="hidden" id="customeremaildelete" name="customeremaildelete" value="">
-							        	<?php foreach($customerinfo as $info): ?>
+							        	<?php while($row1 = mysqli_fetch_array($result2)):;?>
 											<tr>
-												<td><?= $info['CUST_FNAME']; ?></td>
-												<td><?= $info['CUST_LNAME']; ?></td>
-												<td><?= $info['CUST_PHONE']; ?></td>
-												<td><?= $info['CUST_EMAIL']; ?></td>
-												<td><?= $info['CUST_ADDRESS']; ?></td>
+												<td><?php echo $row1[0];?></td>
+												<td><?php echo $row1[1];?></td>
+												<td><?php echo $row1[2];?></td>
+												<td><?php echo $row1[3];?></td>
+												<td><?php echo $row1[4];?></td>
 												<td><input type="submit" value="DELETE" onclick="
-													document.getElementById('customeremaildelete').value = '<?= $info['CUST_EMAIL']; ?>';
+													document.getElementById('customeremaildelete').value = '<?php echo $row1[3];?>';
 													" 
 													style="width: 100px;">
 												</td>
 											</tr>
-										<?php endforeach;?>
+										<?php endwhile;?>
 							      		</tbody>
 							    	</table>
 							  	</div>
 							</section>
 						</form>
 	  				</td>
-					<td id="dashboard-panel" style="width: 100%; margin-top: 0px; vertical-align: top; height: 680px;">
+					<td id="dashboard-panel" style="width: 100%; margin-top: 0px; vertical-align: top; background-color: whitesmoke; height: 556px;">
 						<table style="margin-left: 10px;">
 							<tbody>
 								<tr>
@@ -872,7 +737,7 @@
 										<a style="padding-left: 80px; padding-top: 15px; padding-bottom: 10px; text-decoration: none; border-right: 1px dotted grey;"></a>
 
 										<label style="position: absolute; font-size: 14px; color: lightgrey; display: inline; line-height: 40px; margin-left: 30px">VEHICLE
-											<p style="color: limegreen; font-size: 16px; text-transform:capitalize; text-align: center; line-height: 0px;">
+											<p style="color: lime; font-size: 16px; text-transform:capitalize; text-align: center; line-height: 0px;">
 												<?php echo $numOfVehicle; ?>
 											</p>
 										</label>
@@ -1060,7 +925,6 @@
 	<script>
 		function drivermanagement_display() {
 			document.getElementById('driverdata_td').style.display = 'block';
-			document.getElementById('driver-edit-div').style.display = 'block';
 			document.getElementById('reporting').style.display = 'none';
 			document.getElementById('truckmanagement-td').style.display = 'none';
 			document.getElementById('delivery-edit-div').style.display = 'none';
@@ -1077,7 +941,6 @@
 				$_SESSION['loggedin_time'] = time();
 			?>
 			document.getElementById('dashboard-panel').style.display = 'block';
-			document.getElementById('driver-edit-div').style.display = 'none';
 			document.getElementById('reporting').style.display = 'none';
 			document.getElementById('scheduledata_td').style.display = 'none';
 			document.getElementById('customerdata-td').style.display = 'none';
@@ -1089,7 +952,6 @@
 
 		function customermanagement_display() {
 			document.getElementById('customerdata-td').style.display = 'block';
-			document.getElementById('driver-edit-div').style.display = 'none';
 			document.getElementById('reporting').style.display = 'none'; 								
 			document.getElementById('dashboard-panel').style.display = 'none';
 			document.getElementById('scheduledata_td').style.display = 'none';
@@ -1102,7 +964,6 @@
 		function truckmanagement_display() {
 			document.getElementById('truckmanagement-td').style.display = 'block';
 			document.getElementById('delivery-edit-div').style.display = 'block';
-			document.getElementById('driver-edit-div').style.display = 'none';
 			document.getElementById('reporting').style.display = 'none';
 			document.getElementById('scheduledata_td').style.display = 'none';
 			document.getElementById('schedule-edit-div').style.display = 'none';
@@ -1115,7 +976,6 @@
 
 		function deliverymanagement_display() {
 			document.getElementById('deliverymanagement-td').style.display = 'block';
-			document.getElementById('driver-edit-div').style.display = 'none';
 			document.getElementById('reporting').style.display = 'none';
 			document.getElementById('truckmanagement-td').style.display = 'none';
 			document.getElementById('customerdata-td').style.display = 'none';
@@ -1126,7 +986,6 @@
 
 		function profilemanagement_display() {
 			document.getElementById('profile-td').style.display = 'block';
-			document.getElementById('driver-edit-div').style.display = 'none';
 			document.getElementById('reporting').style.display = 'none';
 			document.getElementById('scheduledata_td').style.display = 'none';
 			document.getElementById('customerdata-td').style.display = 'none';
@@ -1139,7 +998,6 @@
 		function schedulemanagement_display() {
 			document.getElementById('scheduledata_td').style.display = 'block';
 			document.getElementById('schedule-edit-div').style.display = 'block';
-			document.getElementById('driver-edit-div').style.display = 'none';
 			document.getElementById('reporting').style.display = 'none';
 			document.getElementById('delivery-edit-div').style.display = 'none';
 			document.getElementById('profile-td').style.display = 'none';
@@ -1149,7 +1007,7 @@
 			document.getElementById('deliverymanagement-td').style.display = 'none';
 			document.getElementById('driverdata_td').style.display= 'none';
 		}
-		function customer_report() {
+		function reportmanagement_display() {
 			document.getElementById('reporting').style.display = 'block';
 			document.getElementById('scheduledata_td').style.display = 'none';
 			document.getElementById('schedule-edit-div').style.display = 'none';
@@ -1169,26 +1027,16 @@
 		}
 	</script>
 </body>
-<script src="js/displayjquery.js"></script>
-<script src="js/popupjquery.js"></script>
-<script type="text/javascript" src="https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js"></script>
-    <script type="text/javascript" charset="utf-8">
-        $(document).ready(function() {
-            $('#tbl-customer').DataTable();
-        } );
-    </script>	
-<script type="text/javascript">
+<!-- <script src="js/displayjquery.js"></script>
+<script src="js/popupjquery.js"></script> -->
+	
+<!-- <script type="text/javascript">
     $(function() {
       $(".js__p_start").simplePopup();
     });
-</script>
-<script type="text/javascript" src="js/jquery.popup.js"></script>
+</script> -->
+<!-- <script type="text/javascript" src="js/jquery.popup.js"></script> -->
 <script type="text/javascript" src="http://www.shieldui.com/shared/components/latest/js/shieldui-all.min.js"></script>
-<script type="text/javascript">
-	$( document ).ready(function() {
-        $('#employee_grid').DataTable();
-    });
-</script>
 <script type="text/javascript">
     jQuery(function ($) {
         $("#export_pdf").click(function () {
@@ -1210,7 +1058,7 @@
             // when parsing is done, export the data to PDF
             dataSource.read().then(function (data) {
                 var pdf = new shield.exp.PDFDocument({
-                    author: "Admin",
+                    author: "PrepBootstrap",
                     created: new Date()
                 });
 
@@ -1221,11 +1069,11 @@
                     50,
                     data,
                     [
-                      { field: "FIRST_NAME", title: "FIRST NAME", width: 90},
-                        { field: "LAST_NAME", title: "LAST NAME", width: 90 },
-                        { field: "CONTACTS", title: "PHONE NO.", width: 80 },
-                        { field: "EMAIL", title: "EMAIL ADDRESS", width: 125 },
-                        { field: "ADDRESS", title: "HOME ADDRESS", width: 110 }
+                        { field: "FIRST_NAME", title: "FIRST NAME", width: 200 },
+                        { field: "LAST_NAME", title: "LAST NAME", width: 50 },
+                        { field: "CONTACTS", title: "PHONE NUMBER", width: 200 },
+                        { field: "EMAIL", title: "EMAIL ADDRESS", width: 50 },
+                        { field: "ADDRESS", title: "HOME ADDRESS", width: 200 }
                     ],
                     {
                         margins: {
@@ -1236,7 +1084,7 @@
                 );
 
                 pdf.saveAs({
-                    fileName: "Customer report"
+                    fileName: "PrepBootstrapPDF"
                 });
             });
         });

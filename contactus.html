@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>About Us | BriteHouse</title>
+	<title>Contact Us | BriteHouse</title>
 	
 	<link href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet"/>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
@@ -32,7 +32,7 @@
 			<li><a href="index.php">HOME</a></li>
 			<li><a href="about.html">ABOUT</a></li>
 			<li><a href="#">FORUMS</a></li>
-			<li><a href="contactus.html">CONTACT US</a></li>
+			<li><a href="#">CONTACT US</a></li>
 		</ul>
 		<div id="log-bar" style="margin-left: 56%; color: black; vertical-align: top; width: 100px; font-size: 13.3333px;">
 			<form onsubmit="return validatePasswords(this);" action="login.php" method="post">
@@ -67,7 +67,7 @@
 </head>
 <body>
 	<div id="lightblue-bar"></div>
-	<div id="body-middle-div" style="background-color: whitesmoke; height: 750px;">
+	<div id="body-middle-div" style="background-color: whitesmoke; height: 1050px;">
 		<article id="heading">
 			<h1>BRITEHOUSE DELIVERY MANAGEMENT</h1>
 			<div id="about-heading">
@@ -83,59 +83,97 @@
 
 		<article id="about-article">
 			<div id="about-article-mission">
-				<h1>What is our Mission?</h1>
+				<h1 style="font-size: 20px;">Leave a message</h1>
 				<p>
-					In our company, we have several vehicles doing deliveries of consignments, packages and envelopes containing
-					products shipped to customers, documentation and invoices, payments, gifts and other items. We have trucks,
-					minivans, and smaller three wheeled delivery vehicles. They have different load capacities and not all the vehicles
-					can carry all the types of packages we must deliver. They have different costs to operate, and different ranges
-					from the depot they can cover. 
-					We have several drivers on rotation throughout the week. Our drivers have licenses for specific vehicle types, so
-					not all the drivers can drive all the vehicles. There are two drivers assigned to each truck and minivan for each
-					shift, and one driver for the smaller vehicles. We do deliveries every day of the week, starting at 8h00 until 17h00.
-					We also do deliveries on Saturdays, 08h00 until 13h00.
+					<input type="text" id="visitorname" name="visitorname" placeholder="YOUR NAME" 
+					style="height: 50px; width: 310px;padding: 15px 22px; border: 1px solid #bbbbbb; margin: 0px 18px 20px 0px;font-size: 13.3333px;color: #010f5f;font-weight: 300;letter-spacing: 1px;">
+
+					<input type="text" id="visitoremail" name="visitoremail" placeholder="EMAIL"
+					style="height: 50px; width: 305px;padding: 15px 22px; border: 1px solid #bbbbbb; margin: 0px 18px 20px 0px;font-size: 13.3333px;color: #010f5f;font-weight: 300;letter-spacing: 1px;">
+
+					<input type="text" id="visitorwebsite" name="visitorwebsite" placeholder="WEBSITE(OPTIONAL)" 
+					style="height: 50px; width: 305px;padding: 15px 22px; border: 1px solid #bbbbbb; margin: 0px 18px 20px 0px;font-size: 13.3333px;color: #010f5f;font-weight: 300;letter-spacing: 1px;">
+
+					<textarea placeholder="Leave your message here..." style="width: 985px;height: 146px;margin-bottom: 22px;resize: none;padding: 20px;font-size: 13.3333px;border: 1px solid #bbbbbb;"></textarea>
+
+					<input type="submit" id="sendmessage" name="sendmessage" value="SEND A MESSAGE" 
+					style=" cursor: pointer;
+						    background-color: #e66e0d;
+						    width: 200px;
+						    height: 58px;
+						    color: #fff;
+						    font-size: 10pt;
+						    font-weight: 400;
+						    letter-spacing: 1px;
+						    border: 5px solid #fff;
+						    -webkit-background-clip: padding-box;
+						    background-clip: padding-box;
+						    box-shadow: 0px 0px 0px 1px #dbdbdb;
+						    text-shadow: 0px 1px #d72d05;
+						">
 				</p> 
 			</div>
 			<div id="about-article-vision">
-				<h1>What are our Vision?</h1>
+				<h1 style="font-size: 20px;">Contact information</h1>
 				<p>
-					We have several drivers on rotation throughout the 	week. Our drivers have licenses for specific vehicle types, so
-					not all the drivers can drive all the vehicles. There are two drivers assigned to each truck and minivan for each
-					shift, and one driver for the smaller vehicles. We do deliveries every day of the week, starting at 8h00 until 17h00.
-					We also do deliveries on Saturdays, 08h00 until 13h00.
+				
 				</p>
 			</div>
-			<div id="about-article-goals">
-				<h1>Our services include?</h1>
-				<p>
-					<li>Book your deliveries online, then we deliver fast.</li>
-					<li>We believe our customers deserve the best delivery services possible at a reasonable rate.</li>
-	 				<li>We believe in "Quick, Conform & Reliable Service".</li>
-	 				<li>100% prepaid orders placed online.</li>
-				</p>
-			</div>
+			<div id="about-article-map" style="height: 400px; margin-left: 20px; width: 985px;"></div>
+			<script>
+				function initMap() {
+			        map = new google.maps.Map(document.getElementById('about-article-map'), {
+			          center: {lat: -26.040493, lng: 28.023913},
+			          zoom: 15
+			        });
+			        infoWindow = new google.maps.InfoWindow;
+
+			        // Try HTML5 geolocation.
+			        if (navigator.geolocation) {
+			        	var timeoutVal = 10 * 1000 * 1000;
+			          navigator.geolocation.getCurrentPosition(function(position) {
+			            var pos = {
+			              lat: -26.040493,
+			              lng: 28.023913
+			            };
+
+			            
+			          }, function() {
+			            handleLocationError(true, infoWindow, map.getCenter());
+			          }, {enableHighAccuracy: true, timeout: timeoutVal, maximumAge: 0});
+			        } else {
+			          // Browser doesn't support Geolocation
+			          handleLocationError(false, infoWindow, map.getCenter());
+			        }
+			      }
+			      initMap();
+			</script>
+			<script async defer
+			    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDnlqOKVtgRfM3HEbT68NAsFn2HDJj5Vbg&callback=initMap">
+		    </script>
 		</article>
 		<article id="about-article-right-float">
-			<h1 style="font-size: 16px; font-weight: bold;">Development Blog</h1>
+			<h1 style="font-size: 16px; font-weight: bold; margin-top: 0;">HEAD OFFICE</h1>
 			<div id="dev-blog">
-				<li style="border-top: 1px solid lightgrey; border-bottom: 1px solid lightgrey; list-style: none;">March 3, 2015</li>
 				<p style="font-family: Arial; font-size: 13.3333px; text-align: justify;">
-					This is our weekly delivery news post where we share our favourite delivery related resources
-					and freebies from the past week. This is our weekly delivery news post where we share our 
-					favourite delivery related resources and freebies from the past week.
+					The Campus</br>
+					Ground Floor</br>
+					Wembley Building</br>
+					57 Sloane Street</br>
+					Bryanston</br>
+					2021</br>
+					</br>
+					Postal Address:</br>
+					Private Bag X127</br>
+					Bryanston</br>
+					2021</br>
+					Tel No: +27 11 575 0200</br>
+					Fax No: +27 11 576 0200</br>
+					</br>
+					GPS Co-ordinates:</br>
+					-26.040493,28.023913</br>
+					<a href="">Google Map</a>
 				</p>
-			</div>
-		</article>
-		<article id="about-developer">
-			<h1 style="font-size: 16px; font-weight: bold;">Development Team</h1>
-			<div id="dev-blog">
-				<p style="width: 55%; font-family: Arial; font-size: 13.3333px; float: left; text-align: justify;">
-					Hi, meet Letlhogonolo. He's currently doing his third year at North West University Vaal-Triangle.
-					Letlhogonolo is equiped with HTLM5, CSS, PHP, JavaScript, C#, MySQL, NoSQL, Java, JQuery skills etc. 
-					He has also took part in serveral project at the university. He has scored an apraisal
-					of 90% on databases project of which he was the project manager.
-				</p>
-				<img src="Images/admin" alt="britehouse_icon" style="width: 40%; height: 145px; margin-left: 5px; margin-top: 5px;">
 			</div>
 		</article>
 	</div>

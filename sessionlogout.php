@@ -1,0 +1,4 @@
+<?php
+	unset($_SESSION['login_user']);
+	header("Location:index.php");
+?>
